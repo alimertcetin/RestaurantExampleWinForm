@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace RestaurantExampleWinForm
+namespace RestaurantExampleWinForm.Forms
 {
-    public partial class frm_Parent : Form
+    public partial class frm_EnvantereEkle : Form
     {
-        public frm_Parent()
+        public frm_EnvantereEkle()
         {
             InitializeComponent();
+        }
+
+        private void btn_Ekle_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

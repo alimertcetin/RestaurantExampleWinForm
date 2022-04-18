@@ -39,6 +39,7 @@ namespace RestaurantExampleWinForm
             this.IsMdiContainer = true;
             this.Name = "frm_Parent";
             this.Text = "frm_Parent";
+            this.Load += new System.EventHandler(this.frm_Parent_Load);
             this.ResumeLayout(false);
 
         }
