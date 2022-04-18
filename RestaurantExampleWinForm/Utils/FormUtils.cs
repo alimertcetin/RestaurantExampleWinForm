@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 namespace XIV.Utils
 {
+    //TODO : Performance update
     public static class FormUtils
     {
         /// <summary>
@@ -37,16 +38,22 @@ namespace XIV.Utils
         public static bool FormlariBul(string formAd, out List<Form> bulunanFormListesi)
         {
             bulunanFormListesi = new List<Form>();
-            bool found = false;
             foreach (Form form in Application.OpenForms)
             {
                 if (form.Name == formAd)
                 {
-                    found = true;
                     bulunanFormListesi.Add(form);
+                    return true;
                 }
             }
-            return found;
+            return false;
+        }
+
+        public static T GetForm<T>() where T : Form
+        {
+            Type type = typeof(T);
+            FormUtils.FormlariBul(type.Name, out var forms);
+            return (T)forms[0];
         }
 
         /// <summary>
@@ -89,6 +96,7 @@ namespace XIV.Utils
         /// </summary>
         public static void TekliFormOlustur<T>(Form mdiParent) where T : Form
         {
+            //TODO : Return active form
             Type type = typeof(T);
             if (!CloseAllInstance(type.Name))
             {
@@ -105,6 +113,20 @@ namespace XIV.Utils
             column.DataPropertyName = DataPropertyName;
             column.HeaderText = Header;
             return column;
+        }
+
+        public static void FillComboWithEnum<T>(ComboBox comboBox) where T : Enum
+        {
+            comboBox.Items.Clear();
+            Array values = EnumUtils.GetValues<T>();
+            foreach (object item in values)
+            {
+                comboBox.Items.Add(item.ToString());
+            }
+            if(comboBox.SelectedIndex == -1 && comboBox.Items.Count > 0)
+            {
+                comboBox.SelectedIndex = 0;
+            }
         }
 
     }
