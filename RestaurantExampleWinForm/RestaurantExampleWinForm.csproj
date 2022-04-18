@@ -46,6 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Food.cs" />
+    <Compile Include="Forms\frm_CreateMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frm_CreateMenu.Designer.cs">
+      <DependentUpon>frm_CreateMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\RestaurantMenu.cs" />
+    <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Forms\frm_EnvantereEkle.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +67,9 @@
     <Compile Include="Forms\frm_MainForm.Designer.cs">
       <DependentUpon>frm_MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Inventory.cs" />
+    <Compile Include="Classes\InventoryItem.cs" />
+    <Compile Include="Utils\SaveSystem.cs" />
     <Compile Include="Utils\FormUtils.cs" />
     <Compile Include="Forms\frm_Parent.cs">
       <SubType>Form</SubType>
@@ -67,6 +79,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\frm_CreateMenu.resx">
+      <DependentUpon>frm_CreateMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frm_EnvantereEkle.resx">
       <DependentUpon>frm_EnvantereEkle.cs</DependentUpon>
     </EmbeddedResource>
@@ -98,5 +113,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

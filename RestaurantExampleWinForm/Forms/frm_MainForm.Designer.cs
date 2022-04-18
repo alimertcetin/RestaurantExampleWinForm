@@ -39,10 +39,12 @@ namespace RestaurantExampleWinForm.Forms
             this.ts_MalzemeEkle = new System.Windows.Forms.ToolStripMenuItem();
             this.ürünYönetimiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_MalzemeCikar = new System.Windows.Forms.ToolStripMenuItem();
+            this.ts_EnvanterGoruntule = new System.Windows.Forms.ToolStripMenuItem();
+            this.ts_MenuOlustur = new System.Windows.Forms.ToolStripMenuItem();
             this.label6 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
-            this.comboBox_Hamburger = new System.Windows.Forms.ComboBox();
+            this.cmb_Menu = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -124,7 +126,9 @@ namespace RestaurantExampleWinForm.Forms
             // 
             this.ürünYönetimiToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ts_MalzemeEkle,
-            this.ts_MalzemeCikar});
+            this.ts_MalzemeCikar,
+            this.ts_EnvanterGoruntule,
+            this.ts_MenuOlustur});
             this.ürünYönetimiToolStripMenuItem.Name = "ürünYönetimiToolStripMenuItem";
             this.ürünYönetimiToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
             this.ürünYönetimiToolStripMenuItem.Text = "Ürün Yönetimi";
@@ -134,6 +138,19 @@ namespace RestaurantExampleWinForm.Forms
             this.ts_MalzemeCikar.Name = "ts_MalzemeCikar";
             this.ts_MalzemeCikar.Size = new System.Drawing.Size(221, 22);
             this.ts_MalzemeCikar.Text = "Envanterden Malzeme Çıkar";
+            // 
+            // ts_EnvanterGoruntule
+            // 
+            this.ts_EnvanterGoruntule.Name = "ts_EnvanterGoruntule";
+            this.ts_EnvanterGoruntule.Size = new System.Drawing.Size(221, 22);
+            this.ts_EnvanterGoruntule.Text = "Envanteri Görüntüle";
+            // 
+            // ts_MenuOlustur
+            // 
+            this.ts_MenuOlustur.Name = "ts_MenuOlustur";
+            this.ts_MenuOlustur.Size = new System.Drawing.Size(221, 22);
+            this.ts_MenuOlustur.Text = "Menu Oluştur";
+            this.ts_MenuOlustur.Click += new System.EventHandler(this.ts_MenuOlustur_Click);
             // 
             // label6
             // 
@@ -163,16 +180,16 @@ namespace RestaurantExampleWinForm.Forms
             this.label5.TabIndex = 48;
             this.label5.Text = "Adet";
             // 
-            // comboBox_Hamburger
+            // cmb_Menu
             // 
-            this.comboBox_Hamburger.FormattingEnabled = true;
-            this.comboBox_Hamburger.Items.AddRange(new object[] {
+            this.cmb_Menu.FormattingEnabled = true;
+            this.cmb_Menu.Items.AddRange(new object[] {
             ""});
-            this.comboBox_Hamburger.Location = new System.Drawing.Point(11, 250);
-            this.comboBox_Hamburger.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBox_Hamburger.Name = "comboBox_Hamburger";
-            this.comboBox_Hamburger.Size = new System.Drawing.Size(345, 21);
-            this.comboBox_Hamburger.TabIndex = 46;
+            this.cmb_Menu.Location = new System.Drawing.Point(11, 250);
+            this.cmb_Menu.Margin = new System.Windows.Forms.Padding(2);
+            this.cmb_Menu.Name = "cmb_Menu";
+            this.cmb_Menu.Size = new System.Drawing.Size(345, 21);
+            this.cmb_Menu.TabIndex = 46;
             // 
             // label4
             // 
@@ -245,7 +262,7 @@ namespace RestaurantExampleWinForm.Forms
             this.Controls.Add(this.label6);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.comboBox_Hamburger);
+            this.Controls.Add(this.cmb_Menu);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
@@ -253,6 +270,8 @@ namespace RestaurantExampleWinForm.Forms
             this.Controls.Add(this.menuStrip1);
             this.Name = "frm_MainForm";
             this.Text = "frm_MainForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frm_MainForm_FormClosed);
+            this.Load += new System.EventHandler(this.frm_MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -278,12 +297,14 @@ namespace RestaurantExampleWinForm.Forms
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBox_Hamburger;
+        private System.Windows.Forms.ComboBox cmb_Menu;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ToolStripMenuItem siparisYönetimiToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem ts_EnvanterGoruntule;
+        private System.Windows.Forms.ToolStripMenuItem ts_MenuOlustur;
     }
 }
