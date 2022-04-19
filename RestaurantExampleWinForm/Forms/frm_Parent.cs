@@ -21,7 +21,7 @@ namespace RestaurantExampleWinForm
 
         private void frm_Parent_Load(object sender, EventArgs e)
         {
-            FormUtils.TekliFormOlustur<frm_MainForm>(this);
+            FormUtils.OpenForm<frm_MainForm>(this);
         }
     }
 }

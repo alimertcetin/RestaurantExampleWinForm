@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace XIV.Utils
 {
-    //TODO : Performance update
+    
     public static class FormUtils
     {
         /// <summary>
-        /// Açık olan bütün formları kapatır ve giriş ekranını aktif hale getirir.
+        /// Close all forms but keep the ones that has same type with <typeparamref name="T"/>
         /// </summary>
-        public static void GirisEkraninaDon(string girisFormIsmi)
+        public static void CloseAllBut<T>() where T : Form
         {
-            List<Form> Acikformlar = new List<Form>();
+            Type type = typeof(T);
             foreach (Form form in Application.OpenForms)
             {
-                Acikformlar.Add(form);
-            }
-            foreach (Form form in Acikformlar)
-            {
-                if (form.Name != girisFormIsmi)
+                if (form.GetType() != type)
                 {
                     form.Close();
                 }
@@ -32,78 +29,63 @@ namespace XIV.Utils
         }
 
         /// <summary>
-        /// Verilen isme göre açık olan formlarda formu arar.
-        /// Bulunduysa true döndürür.
+        /// Close all Forms type of <typeparamref name="T"/>
         /// </summary>
-        public static bool FormlariBul(string formAd, out List<Form> bulunanFormListesi)
+        public static void CloseAllInstance<T>() where T : Form
         {
-            bulunanFormListesi = new List<Form>();
-            foreach (Form form in Application.OpenForms)
+            Type type = typeof(T);
+            foreach (Form item in Application.OpenForms)
             {
-                if (form.Name == formAd)
+                if(item.GetType() != type)
                 {
-                    bulunanFormListesi.Add(form);
-                    return true;
+                    item.Close();
                 }
             }
-            return false;
         }
 
+        /// <summary>
+        /// If form is open returns form, else returns new form of type <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T">Form Type</typeparam>
         public static T GetForm<T>() where T : Form
         {
             Type type = typeof(T);
-            FormUtils.FormlariBul(type.Name, out var forms);
-            return (T)forms[0];
-        }
-
-        /// <summary>
-        /// Eğer formun birden fazla örneği varsa bir tanesini aktif yapar ve diğerlerini kapatıp true döndürür.
-        /// Açık bir örnek yoksa false döndürür.
-        /// </summary>
-        public static bool CloseAllInstance(string FormAdi)
-        {
-            FormUtils.FormlariBul(FormAdi, out List<Form> form);
-            if (form.Count >= 1)
+            foreach (Form item in Application.OpenForms)
             {
-                for (int i = 1; i < form.Count; i++)
+                if(item.GetType() == type)
                 {
-                    form[i].Close();
-                    form.RemoveAt(i);
+                    return (T)item;
                 }
-                form[0].Activate();
-                return true;
             }
-            else return false;
+            return CreateForm<T>();
         }
 
         /// <summary>
-        /// Eğer verilen türde açık form yoksa formu oluşturur. Açık form varsa aktif hale getirir.
+        /// If form is open returns form, else returns new form of type <typeparamref name="T"/>
         /// </summary>
-        public static void TekliFormOlustur<T>(string mdiParent) where T : Form
+        /// <typeparam name="T">Form Type</typeparam>
+        public static T OpenForm<T>(Form mdiParent, bool show = true) where T : Form
         {
-            Type type = typeof(T);
-            if (!CloseAllInstance(type.Name))
+            Form form = GetForm<T>();
+            form.MdiParent = mdiParent;
+            if (show)
             {
-                Form frm = (Form)Activator.CreateInstance(type);
-                FormlariBul(mdiParent, out List<Form> anaSayfa);
-                frm.MdiParent = anaSayfa[0];
-                frm.Show();
+                form.Show();
+                //TODO : Do we need Activate call?
+                form.Activate();
             }
+
+            return (T)form;
         }
 
         /// <summary>
-        /// Eğer verilen türde açık form yoksa formu oluşturur. Açık form varsa aktif hale getirir.
+        /// Opens a form type of <typeparamref name="T"/>
         /// </summary>
-        public static void TekliFormOlustur<T>(Form mdiParent) where T : Form
+        public static T CreateForm<T>() where T : Form
         {
-            //TODO : Return active form
             Type type = typeof(T);
-            if (!CloseAllInstance(type.Name))
-            {
-                Form frm = (Form)Activator.CreateInstance(type);
-                frm.MdiParent = mdiParent;
-                frm.Show();
-            }
+            Form form = (Form)Activator.CreateInstance(type);
+            return (T)form;
         }
 
         public static DataGridViewColumn ColumnOlustur(string DataPropertyName, string Header)
@@ -129,5 +111,19 @@ namespace XIV.Utils
             }
         }
 
+        public static void RefreshComboBox(ComboBox cmb, List<object> itemList)
+        {
+            cmb.Items.Clear();
+            foreach (object item in itemList)
+            {
+                cmb.Items.Add(item);
+            }
+            if(cmb.SelectedIndex == -1 && cmb.Items.Count > 0)
+            {
+                cmb.SelectedIndex = 0;
+            }
+        }
+
     }
+
 }

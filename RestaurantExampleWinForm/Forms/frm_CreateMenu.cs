@@ -16,24 +16,39 @@ namespace RestaurantExampleWinForm.Forms
     public partial class frm_CreateMenu : Form
     {
         List<Food> foods = new List<Food>();
-        public Action<RestaurantMenu> onMenuCreated;
+        public Action<RestaurantMenu> OnRestaurantMenuCreated;
 
         public frm_CreateMenu()
         {
             InitializeComponent();
         }
 
-        public void AddFoodsToPanel(List<Food> foods)
+        public void Initialize(List<Food> foods)
         {
             this.foods = foods;
+        }
+
+        public void ClearFlowLayout()
+        {
             flp_Ingredients.Controls.Clear();
-            for (int i = 0; i < foods.Count; i++)
+        }
+
+        public void AddFoodToPanel(Food food)
+        {
+            CheckBox cb = new CheckBox();
+            cb.Name = $"cb_{food.Name}";
+            cb.Text = food.Name;
+            flp_Ingredients.Controls.Add(cb);
+        }
+
+        public void RemoveFoodFromPanel(Food food)
+        {
+            for (int i = flp_Ingredients.Controls.Count - 1; i >= 0; i--)
             {
-                Food food = foods[i];
-                CheckBox cb = new CheckBox();
-                cb.Name = $"cb_{food.Name}";
-                cb.Text = food.Name;
-                flp_Ingredients.Controls.Add(cb);
+                if (flp_Ingredients.Controls[i] is CheckBox item && item.Name == $"cb_{food.Name}")
+                {
+                    flp_Ingredients.Controls.RemoveAt(i);
+                }
             }
         }
 
@@ -53,7 +68,7 @@ namespace RestaurantExampleWinForm.Forms
                 }
 
                 RestaurantMenu menu = RestaurantMenu.CreateMenu(txt_MenuName.Text, result, menuFoods.ToArray());
-                onMenuCreated?.Invoke(menu);
+                OnRestaurantMenuCreated?.Invoke(menu);
             }
             else
             {

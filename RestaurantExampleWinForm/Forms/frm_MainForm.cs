@@ -43,58 +43,46 @@ namespace RestaurantExampleWinForm.Forms
 
         private void ts_MalzemeEkle_Click(object sender, EventArgs e)
         {
-            FormUtils.TekliFormOlustur<frm_EnvantereEkle>(this.MdiParent);
-            frm_EnvantereEkle form = FormUtils.GetForm<frm_EnvantereEkle>();
-            form.onAddItem += inventory.Add;
+            frm_EnvantereEkle form = FormUtils.OpenForm<frm_EnvantereEkle>(this.MdiParent);
+            form.onAddItem += AddToInventory;
             form.FormClosing += OnEnvatereEkleClosing;
         }
 
         private void OnEnvatereEkleClosing(object sender, FormClosingEventArgs e)
         {
             frm_EnvantereEkle form = FormUtils.GetForm<frm_EnvantereEkle>();
-            form.onAddItem -= inventory.Add;
+            form.onAddItem -= AddToInventory;
             form.FormClosing -= OnEnvatereEkleClosing;
         }
 
         private void ts_MenuOlustur_Click(object sender, EventArgs e)
         {
-            FormUtils.TekliFormOlustur<frm_CreateMenu>(this.MdiParent);
-            frm_CreateMenu form = FormUtils.GetForm<frm_CreateMenu>();
+            frm_CreateMenu form = FormUtils.OpenForm<frm_CreateMenu>(this.MdiParent);
             List<InventoryItem> inventoryItems = inventory.GetItems();
-            List<Food> foodList = new List<Food>();
             for (int i = 0; i < inventoryItems.Count; i++)
             {
                 InventoryItem inventoryItem = inventoryItems[i];
                 if(inventoryItem.Item is Food)
                 {
-                    foodList.Add(inventoryItem.Item as Food);
+                    form.AddFoodToPanel(inventoryItem.Item as Food);
                 }
             }
-            form.AddFoodsToPanel(foodList);
-            form.onMenuCreated += OnMenuCreated;
+            form.OnRestaurantMenuCreated += OnMenuCreated;
         }
 
         private void OnMenuCreated(RestaurantMenu addedMenu)
         {
-            bool flag = false;
             for (int i = 0; i < menuList.Count; i++)
             {
                 RestaurantMenu menu = menuList[i];
                 if(menu.Name == addedMenu.Name)
                 {
-                    flag = true;
-                    break;
+                    MessageBox.Show($"There is already a menu that has the same name. {addedMenu.Name}");
+                    return;
                 }
             }
-            if (!flag)
-            {
-                menuList.Add(addedMenu);
-                RefreshMenuCmb();
-            }
-            else
-            {
-                MessageBox.Show($"There is already a menu that has the same name. {addedMenu.Name}");
-            }
+            menuList.Add(addedMenu);
+            RefreshMenuCmb();
         }
 
         private void RefreshMenuCmb()
@@ -108,6 +96,11 @@ namespace RestaurantExampleWinForm.Forms
             {
                 cmb_Menu.SelectedIndex = 0;
             }
+        }
+
+        private void AddToInventory(InventoryItem inventoryItem)
+        {
+            inventory.Add(inventoryItem);
         }
     }
 }
