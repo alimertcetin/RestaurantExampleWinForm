@@ -13,7 +13,7 @@ namespace RestaurantExampleWinForm.Forms
         public frm_EnvantereEkle()
         {
             InitializeComponent();
-            FormUtils.FillComboWithEnum<FoodType>(cmb_ItemTypes);
+            FormUtils.FillCombo_WithEnum<FoodType>(cmb_ItemTypes);
             nup_Count.Minimum = 1;
         }
 
@@ -27,6 +27,10 @@ namespace RestaurantExampleWinForm.Forms
                 InventoryItem inventoryItem = new InventoryItem((int)nup_Count.Value, food);
                 onAddItem?.Invoke(inventoryItem);
                 MessageBox.Show($"{food.Name} added to inventory");
+            }
+            else
+            {
+                MessageBox.Show("Item price is not in a correct format");
             }
         }
     }

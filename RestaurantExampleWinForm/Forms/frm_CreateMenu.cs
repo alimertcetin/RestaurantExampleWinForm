@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XIV.InventorySystem;
+using XIV.Utils;
 
 namespace RestaurantExampleWinForm.Forms
 {
@@ -21,16 +22,19 @@ namespace RestaurantExampleWinForm.Forms
         public frm_CreateMenu()
         {
             InitializeComponent();
+            FormUtils.FillFlp_CheckBoxWithEnum<MenuSize>(flp_MenuSize);
         }
 
         public void Initialize(List<Food> foods)
         {
             this.foods = foods;
+            FormUtils.FillFlp_CheckBoxWithEnum<MenuSize>(flp_MenuSize);
         }
 
         public void ClearFlowLayout()
         {
             flp_Ingredients.Controls.Clear();
+            this.foods.Clear();
         }
 
         public void AddFoodToPanel(Food food)
@@ -39,6 +43,7 @@ namespace RestaurantExampleWinForm.Forms
             cb.Name = $"cb_{food.Name}";
             cb.Text = food.Name;
             flp_Ingredients.Controls.Add(cb);
+            this.foods.Add(food);
         }
 
         public void RemoveFoodFromPanel(Food food)
@@ -48,13 +53,29 @@ namespace RestaurantExampleWinForm.Forms
                 if (flp_Ingredients.Controls[i] is CheckBox item && item.Name == $"cb_{food.Name}")
                 {
                     flp_Ingredients.Controls.RemoveAt(i);
+                    foods.Remove(food);
                 }
             }
         }
 
         private void btn_Create_Click(object sender, EventArgs e)
         {
-            if(double.TryParse(txt_Price.Text, out var result))
+            List<MenuSize> selectedSizeList = new List<MenuSize>();
+            for (int i = 0; i < flp_MenuSize.Controls.Count; i++)
+            {
+                if (flp_MenuSize.Controls[i] is CheckBox item)
+                {
+                    MenuSize selectedType = EnumUtils.GetType<MenuSize>(item.Text);
+                    selectedSizeList.Add(selectedType);
+                }
+            }
+            if(selectedSizeList.Count == 0)
+            {
+                MessageBox.Show("You have to select at least 1 size");
+                return;
+            }
+
+            if (double.TryParse(txt_Price.Text, out var result))
             {
                 List<InventoryItem> menuFoods = new List<InventoryItem>();
                 foreach (CheckBox item in flp_Ingredients.Controls)
@@ -67,7 +88,8 @@ namespace RestaurantExampleWinForm.Forms
                     menuFoods.Add(inventoryItem);
                 }
 
-                RestaurantMenu menu = RestaurantMenu.CreateMenu(txt_MenuName.Text, result, menuFoods.ToArray());
+                RestaurantMenu menu = RestaurantMenu.CreateMenu(txt_MenuName.Text, result,
+                    selectedSizeList, menuFoods.ToArray());
                 OnRestaurantMenuCreated?.Invoke(menu);
             }
             else

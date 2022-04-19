@@ -36,13 +36,15 @@ namespace RestaurantExampleWinForm.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.txt_MenuName = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.flp_MenuSize = new System.Windows.Forms.FlowLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // flp_Ingredients
             // 
             this.flp_Ingredients.Location = new System.Drawing.Point(12, 35);
             this.flp_Ingredients.Name = "flp_Ingredients";
-            this.flp_Ingredients.Size = new System.Drawing.Size(776, 178);
+            this.flp_Ingredients.Size = new System.Drawing.Size(347, 178);
             this.flp_Ingredients.TabIndex = 0;
             // 
             // label1
@@ -57,7 +59,7 @@ namespace RestaurantExampleWinForm.Forms
             // 
             // btn_Create
             // 
-            this.btn_Create.Location = new System.Drawing.Point(696, 404);
+            this.btn_Create.Location = new System.Drawing.Point(620, 404);
             this.btn_Create.Name = "btn_Create";
             this.btn_Create.Size = new System.Drawing.Size(92, 34);
             this.btn_Create.TabIndex = 1;
@@ -99,11 +101,30 @@ namespace RestaurantExampleWinForm.Forms
             this.label3.TabIndex = 4;
             this.label3.Text = "Menu Name";
             // 
+            // flp_MenuSize
+            // 
+            this.flp_MenuSize.Location = new System.Drawing.Point(365, 35);
+            this.flp_MenuSize.Name = "flp_MenuSize";
+            this.flp_MenuSize.Size = new System.Drawing.Size(347, 178);
+            this.flp_MenuSize.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label4.Location = new System.Drawing.Point(362, 14);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(78, 18);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "Menu Size";
+            // 
             // frm_CreateMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(725, 450);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.flp_MenuSize);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txt_MenuName);
             this.Controls.Add(this.label3);
@@ -127,5 +148,7 @@ namespace RestaurantExampleWinForm.Forms
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txt_MenuName;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.FlowLayoutPanel flp_MenuSize;
+        private System.Windows.Forms.Label label4;
     }
 }

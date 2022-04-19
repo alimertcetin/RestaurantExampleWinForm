@@ -32,7 +32,16 @@ namespace RestaurantExampleWinForm.Forms
         {
             inventory = SaveSystem.Load<Inventory>(INVENTORY_PATH);
             menuList = SaveSystem.Load<List<RestaurantMenu>>(MENU_PATH);
+            nup_menuAmount.Minimum = 1;
             RefreshMenuCmb();
+            RefreshFlpSize();
+        }
+
+        private void RefreshFlpSize()
+        {
+            //TODO : menülerden şu anda seçileni bul
+            //Menünün boyut seçeneklerini al
+            //Radio button olarak flpSize'a ekle
         }
 
         private void frm_MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -48,13 +57,6 @@ namespace RestaurantExampleWinForm.Forms
             form.FormClosing += OnEnvatereEkleClosing;
         }
 
-        private void OnEnvatereEkleClosing(object sender, FormClosingEventArgs e)
-        {
-            frm_EnvantereEkle form = FormUtils.GetForm<frm_EnvantereEkle>();
-            form.onAddItem -= AddToInventory;
-            form.FormClosing -= OnEnvatereEkleClosing;
-        }
-
         private void ts_MenuOlustur_Click(object sender, EventArgs e)
         {
             frm_CreateMenu form = FormUtils.OpenForm<frm_CreateMenu>(this.MdiParent);
@@ -67,7 +69,35 @@ namespace RestaurantExampleWinForm.Forms
                     form.AddFoodToPanel(inventoryItem.Item as Food);
                 }
             }
+            form.FormClosing += OnCreateMenuClosing;
             form.OnRestaurantMenuCreated += OnMenuCreated;
+        }
+
+        private void ts_MalzemeCikar_Click(object sender, EventArgs e)
+        {
+            frm_EnvanterdenCikar form = FormUtils.OpenForm<frm_EnvanterdenCikar>(this.MdiParent);
+            form.OnRemoveItem += RemoveFromInventory;
+            form.FormClosing += OnEnvanterdenCikarClosing;
+        }
+
+        private void OnEnvatereEkleClosing(object sender, FormClosingEventArgs e)
+        {
+            frm_EnvantereEkle form = FormUtils.GetForm<frm_EnvantereEkle>();
+            form.onAddItem -= AddToInventory;
+            form.FormClosing -= OnEnvatereEkleClosing;
+        }
+
+        private void OnEnvanterdenCikarClosing(object sender, FormClosingEventArgs e)
+        {
+            frm_EnvanterdenCikar form = FormUtils.GetForm<frm_EnvanterdenCikar>();
+            form.FormClosing -= OnEnvanterdenCikarClosing;
+        }
+
+        private void OnCreateMenuClosing(object sender, FormClosingEventArgs e)
+        {
+            frm_CreateMenu form = FormUtils.GetForm<frm_CreateMenu>();
+            form.FormClosing -= OnCreateMenuClosing;
+            form.OnRestaurantMenuCreated -= OnMenuCreated;
         }
 
         private void OnMenuCreated(RestaurantMenu addedMenu)
@@ -101,6 +131,16 @@ namespace RestaurantExampleWinForm.Forms
         private void AddToInventory(InventoryItem inventoryItem)
         {
             inventory.Add(inventoryItem);
+        }
+
+        private void RemoveFromInventory(InventoryItem inventoryItem)
+        {
+            inventory.Remove(inventoryItem.Item, inventoryItem.Amount);
+        }
+
+        private void btn_SiparisEkle_Click(object sender, EventArgs e)
+        {
+            //TODO : Create order, update total price, remove from inventory
         }
     }
 }

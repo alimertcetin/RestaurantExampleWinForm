@@ -2,12 +2,6 @@
 
 namespace Restaurant.Data
 {
-    public enum FoodType
-    {
-        Hamburger = 1,
-        Ingredient = 2,
-    }
-
     [System.Serializable]
     public class Food
     {

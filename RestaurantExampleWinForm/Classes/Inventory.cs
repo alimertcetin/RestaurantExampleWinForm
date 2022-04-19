@@ -22,21 +22,17 @@ namespace XIV.InventorySystem
 
         public void Add(InventoryItem itemToAdd)
         {
-            bool isAdded = false;
             for (int i = 0; i < inventoryItems.Count; i++)
             {
                 InventoryItem item = inventoryItems[i];
                 if (item.Equals(itemToAdd.Item))
                 {
                     item.Amount += itemToAdd.Amount;
-                    isAdded = true;
-                    break;
+                    return;
                 }
             }
-            if (!isAdded)
-            {
-                inventoryItems.Add(itemToAdd);
-            }
+
+            inventoryItems.Add(itemToAdd);
         }
 
         public void RemoveAll(object itemToRemove)

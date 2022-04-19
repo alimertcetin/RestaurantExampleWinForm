@@ -33,20 +33,20 @@ namespace RestaurantExampleWinForm.Forms
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.siparişBilgileriToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flp_ExtraIngredients = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flp_Size = new System.Windows.Forms.FlowLayoutPanel();
             this.ts_MalzemeEkle = new System.Windows.Forms.ToolStripMenuItem();
             this.ürünYönetimiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_MalzemeCikar = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_EnvanterGoruntule = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_MenuOlustur = new System.Windows.Forms.ToolStripMenuItem();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.lbl_TotalPrice = new System.Windows.Forms.Label();
+            this.nup_menuAmount = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.cmb_Menu = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_SiparisEkle = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.siparisYönetimiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +54,7 @@ namespace RestaurantExampleWinForm.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nup_menuAmount)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,7 +77,7 @@ namespace RestaurantExampleWinForm.Forms
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.flowLayoutPanel2);
+            this.groupBox3.Controls.Add(this.flp_ExtraIngredients);
             this.groupBox3.Location = new System.Drawing.Point(11, 384);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
@@ -87,17 +87,17 @@ namespace RestaurantExampleWinForm.Forms
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Extra Malzemeler";
             // 
-            // flowLayoutPanel2
+            // flp_ExtraIngredients
             // 
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(10, 23);
-            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(2);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(321, 71);
-            this.flowLayoutPanel2.TabIndex = 26;
+            this.flp_ExtraIngredients.Location = new System.Drawing.Point(10, 23);
+            this.flp_ExtraIngredients.Margin = new System.Windows.Forms.Padding(2);
+            this.flp_ExtraIngredients.Name = "flp_ExtraIngredients";
+            this.flp_ExtraIngredients.Size = new System.Drawing.Size(321, 71);
+            this.flp_ExtraIngredients.TabIndex = 26;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.flowLayoutPanel1);
+            this.groupBox1.Controls.Add(this.flp_Size);
             this.groupBox1.Location = new System.Drawing.Point(11, 276);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
@@ -107,13 +107,13 @@ namespace RestaurantExampleWinForm.Forms
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "YiyecekBoyut Seçin";
             // 
-            // flowLayoutPanel1
+            // flp_Size
             // 
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 23);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(321, 71);
-            this.flowLayoutPanel1.TabIndex = 26;
+            this.flp_Size.Location = new System.Drawing.Point(10, 23);
+            this.flp_Size.Margin = new System.Windows.Forms.Padding(2);
+            this.flp_Size.Name = "flp_Size";
+            this.flp_Size.Size = new System.Drawing.Size(321, 71);
+            this.flp_Size.TabIndex = 26;
             // 
             // ts_MalzemeEkle
             // 
@@ -138,6 +138,7 @@ namespace RestaurantExampleWinForm.Forms
             this.ts_MalzemeCikar.Name = "ts_MalzemeCikar";
             this.ts_MalzemeCikar.Size = new System.Drawing.Size(221, 22);
             this.ts_MalzemeCikar.Text = "Envanterden Malzeme Çıkar";
+            this.ts_MalzemeCikar.Click += new System.EventHandler(this.ts_MalzemeCikar_Click);
             // 
             // ts_EnvanterGoruntule
             // 
@@ -152,23 +153,23 @@ namespace RestaurantExampleWinForm.Forms
             this.ts_MenuOlustur.Text = "Menu Oluştur";
             this.ts_MenuOlustur.Click += new System.EventHandler(this.ts_MenuOlustur_Click);
             // 
-            // label6
+            // lbl_TotalPrice
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(451, 539);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(25, 13);
-            this.label6.TabIndex = 50;
-            this.label6.Text = "£45";
+            this.lbl_TotalPrice.AutoSize = true;
+            this.lbl_TotalPrice.Location = new System.Drawing.Point(451, 539);
+            this.lbl_TotalPrice.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbl_TotalPrice.Name = "lbl_TotalPrice";
+            this.lbl_TotalPrice.Size = new System.Drawing.Size(25, 13);
+            this.lbl_TotalPrice.TabIndex = 50;
+            this.lbl_TotalPrice.Text = "£45";
             // 
-            // numericUpDown1
+            // nup_menuAmount
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(61, 496);
-            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(295, 20);
-            this.numericUpDown1.TabIndex = 49;
+            this.nup_menuAmount.Location = new System.Drawing.Point(61, 496);
+            this.nup_menuAmount.Margin = new System.Windows.Forms.Padding(2);
+            this.nup_menuAmount.Name = "nup_menuAmount";
+            this.nup_menuAmount.Size = new System.Drawing.Size(295, 20);
+            this.nup_menuAmount.TabIndex = 49;
             // 
             // label5
             // 
@@ -201,15 +202,16 @@ namespace RestaurantExampleWinForm.Forms
             this.label4.TabIndex = 45;
             this.label4.Text = "Menü Seçin";
             // 
-            // button1
+            // btn_SiparisEkle
             // 
-            this.button1.Location = new System.Drawing.Point(11, 522);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(344, 31);
-            this.button1.TabIndex = 44;
-            this.button1.Text = "Sipariş Ekle";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btn_SiparisEkle.Location = new System.Drawing.Point(11, 522);
+            this.btn_SiparisEkle.Margin = new System.Windows.Forms.Padding(2);
+            this.btn_SiparisEkle.Name = "btn_SiparisEkle";
+            this.btn_SiparisEkle.Size = new System.Drawing.Size(344, 31);
+            this.btn_SiparisEkle.TabIndex = 44;
+            this.btn_SiparisEkle.Text = "Sipariş Ekle";
+            this.btn_SiparisEkle.UseVisualStyleBackColor = true;
+            this.btn_SiparisEkle.Click += new System.EventHandler(this.btn_SiparisEkle_Click);
             // 
             // label1
             // 
@@ -259,12 +261,12 @@ namespace RestaurantExampleWinForm.Forms
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.lbl_TotalPrice);
+            this.Controls.Add(this.nup_menuAmount);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cmb_Menu);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_SiparisEkle);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.menuStrip1);
@@ -275,7 +277,7 @@ namespace RestaurantExampleWinForm.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nup_menuAmount)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -288,18 +290,18 @@ namespace RestaurantExampleWinForm.Forms
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripMenuItem siparişBilgileriToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.FlowLayoutPanel flp_ExtraIngredients;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel flp_Size;
         private System.Windows.Forms.ToolStripMenuItem ts_MalzemeEkle;
         private System.Windows.Forms.ToolStripMenuItem ürünYönetimiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ts_MalzemeCikar;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label lbl_TotalPrice;
+        private System.Windows.Forms.NumericUpDown nup_menuAmount;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cmb_Menu;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_SiparisEkle;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ToolStripMenuItem siparisYönetimiToolStripMenuItem;
