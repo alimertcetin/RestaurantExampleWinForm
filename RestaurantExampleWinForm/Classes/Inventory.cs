@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Restaurant.Data;
+using System.Collections.Generic;
 namespace XIV.InventorySystem
 {
     [System.Serializable]
@@ -18,6 +19,30 @@ namespace XIV.InventorySystem
         public List<InventoryItem> GetItems()
         {
             return new List<InventoryItem>(inventoryItems);
+        }
+
+        public bool Contains(Food food)
+        {
+            foreach (InventoryItem inventoryItem in inventoryItems)
+            {
+                if (inventoryItem.Item.Equals(food))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Contains(List<InventoryItem> inventoryItems)
+        {
+            for (int i = 0; i < inventoryItems.Count; i++)
+            {
+                if (!Contains(inventoryItems[i].Item))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void Add(InventoryItem itemToAdd)
@@ -59,6 +84,20 @@ namespace XIV.InventorySystem
                         inventoryItems.RemoveAt(i);
                     }
                 }
+            }
+        }
+
+        public void Remove(InventoryItem inventoryItem)
+        {
+            Remove(inventoryItem.Item, inventoryItem.Amount);
+        }
+
+        public void Remove(List<InventoryItem> inventoryItems)
+        {
+            for (int i = 0; i < inventoryItems.Count; i++)
+            {
+                InventoryItem inventoryItem = inventoryItems[i];
+                Remove(inventoryItem.Item, inventoryItem.Amount);
             }
         }
     }

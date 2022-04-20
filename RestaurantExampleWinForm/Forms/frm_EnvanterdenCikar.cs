@@ -4,17 +4,27 @@ using System.Windows.Forms;
 using XIV.InventorySystem;
 using XIV.Utils;
 
+public interface IItemRemoveListener
+{
+    void OnRemoveItem(InventoryItem inventoryItem);
+}
+
 namespace RestaurantExampleWinForm.Forms
 {
     public partial class frm_EnvanterdenCikar : Form
     {
-        public Action<InventoryItem> OnRemoveItem;
+        IItemRemoveListener itemRemoveListener;
 
         public frm_EnvanterdenCikar()
         {
             InitializeComponent();
-            FormUtils.FillCombo_WithEnum<FoodType>(cmb_ItemTypes);
+            FormUtils.FillListControl_WithEnum<FoodType>(cmb_ItemTypes);
             nup_Count.Minimum = 1;
+        }
+
+        public void Initialize(IItemRemoveListener itemRemoveListener)
+        {
+            this.itemRemoveListener = itemRemoveListener;
         }
 
         private void btn_Cikar_Click(object sender, EventArgs e)
@@ -23,7 +33,7 @@ namespace RestaurantExampleWinForm.Forms
             FoodType type = EnumUtils.GetType<FoodType>(typeName);
             Food food = new Food(txt_ItemName.Text, 0, type);
             InventoryItem inventoryItem = new InventoryItem((int)nup_Count.Value, food);
-            OnRemoveItem?.Invoke(inventoryItem);
+            itemRemoveListener.OnRemoveItem(inventoryItem);
             //TODO : We dont know is inventory has this item
             MessageBox.Show($"{food.Name} removed from inventory");
         }

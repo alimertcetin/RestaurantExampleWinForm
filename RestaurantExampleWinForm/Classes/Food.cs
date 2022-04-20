@@ -22,6 +22,15 @@ namespace Restaurant.Data
         {
             return Name.GetHashCode();
         }
+
+        public override bool Equals(object obj)
+        {
+            if(!(obj is Food))
+            {
+                return false;
+            }
+            return obj.GetHashCode() == GetHashCode();
+        }
     }
 
 }

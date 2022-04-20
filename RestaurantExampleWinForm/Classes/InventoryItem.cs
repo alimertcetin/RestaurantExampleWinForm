@@ -1,18 +1,14 @@
-﻿namespace XIV.InventorySystem
+﻿using Restaurant.Data;
+
+namespace XIV.InventorySystem
 {
     [System.Serializable]
     public class InventoryItem
     {
         public int Amount;
-        public object Item;
+        public Food Item;
 
-        //reflection
-        private InventoryItem()
-        {
-
-        }
-
-        public InventoryItem(int amount, object item)
+        public InventoryItem(int amount, Food item)
         {
             this.Amount = amount;
             this.Item = item;

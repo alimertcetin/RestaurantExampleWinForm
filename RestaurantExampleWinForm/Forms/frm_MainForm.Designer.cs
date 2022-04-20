@@ -48,7 +48,7 @@ namespace RestaurantExampleWinForm.Forms
             this.label4 = new System.Windows.Forms.Label();
             this.btn_SiparisEkle = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lstb_OrderList = new System.Windows.Forms.ListBox();
             this.siparisYönetimiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -183,6 +183,7 @@ namespace RestaurantExampleWinForm.Forms
             // 
             // cmb_Menu
             // 
+            this.cmb_Menu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmb_Menu.FormattingEnabled = true;
             this.cmb_Menu.Items.AddRange(new object[] {
             ""});
@@ -191,6 +192,8 @@ namespace RestaurantExampleWinForm.Forms
             this.cmb_Menu.Name = "cmb_Menu";
             this.cmb_Menu.Size = new System.Drawing.Size(345, 21);
             this.cmb_Menu.TabIndex = 46;
+            this.cmb_Menu.SelectedIndexChanged += new System.EventHandler(this.cmb_Menu_SelectedIndexChanged);
+            this.cmb_Menu.SizeChanged += new System.EventHandler(this.cmb_Menu_SizeChanged);
             // 
             // label4
             // 
@@ -223,14 +226,14 @@ namespace RestaurantExampleWinForm.Forms
             this.label1.TabIndex = 43;
             this.label1.Text = "Toplam Tutar";
             // 
-            // listBox1
+            // lstb_OrderList
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(375, 27);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(498, 498);
-            this.listBox1.TabIndex = 42;
+            this.lstb_OrderList.FormattingEnabled = true;
+            this.lstb_OrderList.Location = new System.Drawing.Point(375, 27);
+            this.lstb_OrderList.Margin = new System.Windows.Forms.Padding(2);
+            this.lstb_OrderList.Name = "lstb_OrderList";
+            this.lstb_OrderList.Size = new System.Drawing.Size(498, 498);
+            this.lstb_OrderList.TabIndex = 42;
             // 
             // siparisYönetimiToolStripMenuItem
             // 
@@ -268,7 +271,7 @@ namespace RestaurantExampleWinForm.Forms
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btn_SiparisEkle);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.lstb_OrderList);
             this.Controls.Add(this.menuStrip1);
             this.Name = "frm_MainForm";
             this.Text = "frm_MainForm";
@@ -303,7 +306,7 @@ namespace RestaurantExampleWinForm.Forms
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btn_SiparisEkle;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lstb_OrderList;
         private System.Windows.Forms.ToolStripMenuItem siparisYönetimiToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ts_EnvanterGoruntule;

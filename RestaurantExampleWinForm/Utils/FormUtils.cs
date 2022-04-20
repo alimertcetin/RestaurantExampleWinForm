@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
@@ -97,7 +98,7 @@ namespace XIV.Utils
             return column;
         }
 
-        public static void FillCombo_WithEnum<T>(ComboBox comboBox) where T : Enum
+        public static void FillListControl_WithEnum<T>(ComboBox comboBox) where T : Enum
         {
             comboBox.Items.Clear();
             Array values = EnumUtils.GetValues<T>();
@@ -108,32 +109,6 @@ namespace XIV.Utils
             if(comboBox.SelectedIndex == -1 && comboBox.Items.Count > 0)
             {
                 comboBox.SelectedIndex = 0;
-            }
-        }
-
-        public static void FillFlp_RadioWithEnum<T>(FlowLayoutPanel flowLayoutPanel) 
-            where T : Enum
-        {
-            flowLayoutPanel.Controls.Clear();
-            Array values = EnumUtils.GetValues<T>();
-            foreach (object item in values)
-            {
-                var control = new RadioButton();
-                control.Name = $"rb_{item}";
-                control.Text = item.ToString();
-            }
-        }
-
-        public static void FillFlp_CheckBoxWithEnum<T>(FlowLayoutPanel flowLayoutPanel) 
-            where T : Enum
-        {
-            flowLayoutPanel.Controls.Clear();
-            Array values = EnumUtils.GetValues<T>();
-            foreach (object item in values)
-            {
-                var control = new CheckBox();
-                control.Name = $"cb_{item}";
-                control.Text = item.ToString();
             }
         }
 
@@ -150,6 +125,53 @@ namespace XIV.Utils
             }
         }
 
+    }
+
+    public static class FlowLayoutUtils
+    {
+        public static void FillWithEnum<TEnum, TControl>(FlowLayoutPanel panel)
+            where TEnum : Enum
+            where TControl : ButtonBase
+        {
+            panel.Controls.Clear();
+            Array values = EnumUtils.GetValues<TEnum>();
+            foreach (object item in values)
+            {
+                var control = (ButtonBase)Activator.CreateInstance(typeof(TControl));
+                control.Name = $"{item}";
+                control.Text = item.ToString();
+                panel.Controls.Add(control);
+            }
+        }
+
+        public static void FillWithEnumList<TEnum, TControl>(FlowLayoutPanel panel, IList<TEnum> list)
+            where TEnum : Enum
+            where TControl : ButtonBase
+        {
+            panel.Controls.Clear();
+            foreach (TEnum item in list)
+            {
+                var control = (ButtonBase)Activator.CreateInstance(typeof(TControl));
+                control.Name = $"{item}";
+                control.Text = item.ToString();
+                panel.Controls.Add(control);
+            }
+        }
+
+        public static bool GetSelectedRadio(FlowLayoutPanel flowLayetPanel, out RadioButton selected)
+        {
+            selected = null;
+            foreach (RadioButton rb in flowLayetPanel.Controls)
+            {
+                if (rb.Checked)
+                {
+                    selected = rb;
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 
 }
