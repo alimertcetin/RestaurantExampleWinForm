@@ -8,15 +8,16 @@ using XIV.Utils;
 
 public interface IMenuCreationListener
 {
-    void OnRestaurantMenuCreated(RestaurantMenu createdMenu);
+    bool OnRestaurantMenuCreated(RestaurantMenu createdMenu);
 }
 
 namespace RestaurantExampleWinForm.Forms
 {
-    public partial class frm_CreateMenu : Form
+    public partial class frm_CreateMenu : Form, IInventoryListener
     {
-        List<Food> foods = new List<Food>();
         IMenuCreationListener menuCreationListener;
+
+        public IInventoryHolder InventoryHolder { get; private set; }
 
         public frm_CreateMenu()
         {
@@ -24,22 +25,24 @@ namespace RestaurantExampleWinForm.Forms
             FlowLayoutUtils.FillWithEnum<MenuSize, CheckBox>(flp_MenuSize);
         }
 
-        public void Initialize(List<Food> foods, IMenuCreationListener creationListener)
+        public void Initialize(IMenuCreationListener creationListener, IInventoryHolder inventoryHolder)
         {
-            ClearFlowLayout();
-            this.foods = foods;
+            this.menuCreationListener = creationListener;
+            this.InventoryHolder = inventoryHolder;
+            this.InventoryHolder.AddListener(this);
+
+            RefreshFlpIngredients();
             FlowLayoutUtils.FillWithEnum<MenuSize, CheckBox>(flp_MenuSize);
-            menuCreationListener = creationListener;
-            for (int i = 0; i < this.foods.Count; i++)
-            {
-                AddFoodToPanel(this.foods[i]);
-            }
         }
 
-        public void ClearFlowLayout()
+        public void RefreshFlpIngredients()
         {
             flp_Ingredients.Controls.Clear();
-            this.foods.Clear();
+            List<Food> foods = InventoryHolder.GetInventoryItems().ToFoodList();
+            for (int i = 0; i < foods.Count; i++)
+            {
+                AddFoodToPanel(foods[i]);
+            }
         }
 
         private void AddFoodToPanel(Food food)
@@ -57,7 +60,6 @@ namespace RestaurantExampleWinForm.Forms
                 if (flp_Ingredients.Controls[i] is CheckBox item && item.Text == food.Name)
                 {
                     flp_Ingredients.Controls.RemoveAt(i);
-                    foods.Remove(food);
                 }
             }
         }
@@ -107,13 +109,16 @@ namespace RestaurantExampleWinForm.Forms
 
             RestaurantMenu menu = RestaurantMenu.CreateMenu(txt_MenuName.Text, result,
                 selectedSizeList, menuFoods.ToArray());
-            
-            menuCreationListener.OnRestaurantMenuCreated(menu);
-            MessageBox.Show($"Created a menu : {txt_MenuName.Text}");
+
+            if (menuCreationListener.OnRestaurantMenuCreated(menu))
+            {
+                MessageBox.Show($"Created a menu : {txt_MenuName.Text}");
+            }
         }
 
         private Food GetFoodFromList(string foodName)
         {
+            List<Food> foods = InventoryHolder.GetInventoryItems().ToFoodList();
             for (int i = 0; i < foods.Count; i++)
             {
                 if (foods[i].Name == foodName)
@@ -122,6 +127,16 @@ namespace RestaurantExampleWinForm.Forms
                 }    
             }
             return null;
+        }
+
+        public void OnInventoryChanged()
+        {
+            RefreshFlpIngredients();
+        }
+
+        private void frm_CreateMenu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.InventoryHolder.RemoveListener(this);
         }
     }
 }

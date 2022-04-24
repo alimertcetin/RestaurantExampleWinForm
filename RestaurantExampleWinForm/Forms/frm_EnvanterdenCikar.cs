@@ -18,7 +18,7 @@ namespace RestaurantExampleWinForm.Forms
         public frm_EnvanterdenCikar()
         {
             InitializeComponent();
-            FormUtils.FillListControl_WithEnum<FoodType>(cmb_ItemTypes);
+            FormUtils.FillComboBox_WithEnum<FoodType>(cmb_ItemTypes);
             nup_Count.Minimum = 1;
         }
 

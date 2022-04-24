@@ -3,7 +3,7 @@
 namespace Restaurant.Data
 {
     [System.Serializable]
-    public class Food
+    public class Food : IEquatable<Food>
     {
         public string ID { get; private set; }
         public string Name;
@@ -23,13 +23,18 @@ namespace Restaurant.Data
             return Name.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            if(!(obj is Food))
+            if(!(other is Food))
             {
                 return false;
             }
-            return obj.GetHashCode() == GetHashCode();
+            return other.GetHashCode() == GetHashCode();
+        }
+
+        public bool Equals(Food other)
+        {
+            return other.GetHashCode() == GetHashCode();
         }
     }
 

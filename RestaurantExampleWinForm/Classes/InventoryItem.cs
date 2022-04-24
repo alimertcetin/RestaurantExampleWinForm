@@ -1,9 +1,10 @@
 ﻿using Restaurant.Data;
+using System;
 
 namespace XIV.InventorySystem
 {
     [System.Serializable]
-    public class InventoryItem
+    public struct InventoryItem : IEquatable<InventoryItem>
     {
         public int Amount;
         public Food Item;
@@ -19,9 +20,14 @@ namespace XIV.InventorySystem
             return Item.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            return Item.GetHashCode() == obj.GetHashCode();
+            return Item.GetHashCode() == other.GetHashCode();
+        }
+
+        public bool Equals(InventoryItem other)
+        {
+            return Item.GetHashCode() == other.GetHashCode();
         }
     }
 }

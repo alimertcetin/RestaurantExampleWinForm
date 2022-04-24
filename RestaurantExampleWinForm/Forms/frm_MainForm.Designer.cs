@@ -41,6 +41,7 @@ namespace RestaurantExampleWinForm.Forms
             this.ts_MalzemeCikar = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_EnvanterGoruntule = new System.Windows.Forms.ToolStripMenuItem();
             this.ts_MenuOlustur = new System.Windows.Forms.ToolStripMenuItem();
+            this.ts_MenuGoruntule = new System.Windows.Forms.ToolStripMenuItem();
             this.lbl_TotalPrice = new System.Windows.Forms.Label();
             this.nup_menuAmount = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -51,6 +52,8 @@ namespace RestaurantExampleWinForm.Forms
             this.lstb_OrderList = new System.Windows.Forms.ListBox();
             this.siparisYönetimiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.btn_CancelSelected = new System.Windows.Forms.Button();
+            this.btn_Checkout = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -128,7 +131,8 @@ namespace RestaurantExampleWinForm.Forms
             this.ts_MalzemeEkle,
             this.ts_MalzemeCikar,
             this.ts_EnvanterGoruntule,
-            this.ts_MenuOlustur});
+            this.ts_MenuOlustur,
+            this.ts_MenuGoruntule});
             this.ürünYönetimiToolStripMenuItem.Name = "ürünYönetimiToolStripMenuItem";
             this.ürünYönetimiToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
             this.ürünYönetimiToolStripMenuItem.Text = "Ürün Yönetimi";
@@ -145,6 +149,7 @@ namespace RestaurantExampleWinForm.Forms
             this.ts_EnvanterGoruntule.Name = "ts_EnvanterGoruntule";
             this.ts_EnvanterGoruntule.Size = new System.Drawing.Size(221, 22);
             this.ts_EnvanterGoruntule.Text = "Envanteri Görüntüle";
+            this.ts_EnvanterGoruntule.Click += new System.EventHandler(this.ts_EnvanterGoruntule_Click);
             // 
             // ts_MenuOlustur
             // 
@@ -153,15 +158,23 @@ namespace RestaurantExampleWinForm.Forms
             this.ts_MenuOlustur.Text = "Menu Oluştur";
             this.ts_MenuOlustur.Click += new System.EventHandler(this.ts_MenuOlustur_Click);
             // 
+            // ts_MenuGoruntule
+            // 
+            this.ts_MenuGoruntule.Name = "ts_MenuGoruntule";
+            this.ts_MenuGoruntule.Size = new System.Drawing.Size(221, 22);
+            this.ts_MenuGoruntule.Text = "Menuleri Görüntüle";
+            this.ts_MenuGoruntule.Click += new System.EventHandler(this.ts_MenuGoruntule_Click);
+            // 
             // lbl_TotalPrice
             // 
             this.lbl_TotalPrice.AutoSize = true;
-            this.lbl_TotalPrice.Location = new System.Drawing.Point(451, 539);
+            this.lbl_TotalPrice.Location = new System.Drawing.Point(452, 299);
             this.lbl_TotalPrice.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_TotalPrice.Name = "lbl_TotalPrice";
-            this.lbl_TotalPrice.Size = new System.Drawing.Size(25, 13);
+            this.lbl_TotalPrice.Size = new System.Drawing.Size(13, 13);
             this.lbl_TotalPrice.TabIndex = 50;
-            this.lbl_TotalPrice.Text = "£45";
+            this.lbl_TotalPrice.Text = "0";
+            this.lbl_TotalPrice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // nup_menuAmount
             // 
@@ -219,12 +232,12 @@ namespace RestaurantExampleWinForm.Forms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(373, 539);
+            this.label1.Location = new System.Drawing.Point(372, 299);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 13);
+            this.label1.Size = new System.Drawing.Size(76, 13);
             this.label1.TabIndex = 43;
-            this.label1.Text = "Toplam Tutar";
+            this.label1.Text = "Toplam Tutar :";
             // 
             // lstb_OrderList
             // 
@@ -232,7 +245,7 @@ namespace RestaurantExampleWinForm.Forms
             this.lstb_OrderList.Location = new System.Drawing.Point(375, 27);
             this.lstb_OrderList.Margin = new System.Windows.Forms.Padding(2);
             this.lstb_OrderList.Name = "lstb_OrderList";
-            this.lstb_OrderList.Size = new System.Drawing.Size(498, 498);
+            this.lstb_OrderList.Size = new System.Drawing.Size(299, 264);
             this.lstb_OrderList.TabIndex = 42;
             // 
             // siparisYönetimiToolStripMenuItem
@@ -252,15 +265,39 @@ namespace RestaurantExampleWinForm.Forms
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(884, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(687, 24);
             this.menuStrip1.TabIndex = 51;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // btn_CancelSelected
+            // 
+            this.btn_CancelSelected.BackColor = System.Drawing.Color.Bisque;
+            this.btn_CancelSelected.Location = new System.Drawing.Point(375, 327);
+            this.btn_CancelSelected.Name = "btn_CancelSelected";
+            this.btn_CancelSelected.Size = new System.Drawing.Size(75, 55);
+            this.btn_CancelSelected.TabIndex = 54;
+            this.btn_CancelSelected.Text = "Cancel Selected";
+            this.btn_CancelSelected.UseVisualStyleBackColor = false;
+            this.btn_CancelSelected.Click += new System.EventHandler(this.btn_CancelSelected_Click);
+            // 
+            // btn_Checkout
+            // 
+            this.btn_Checkout.BackColor = System.Drawing.Color.LightGreen;
+            this.btn_Checkout.Location = new System.Drawing.Point(599, 299);
+            this.btn_Checkout.Name = "btn_Checkout";
+            this.btn_Checkout.Size = new System.Drawing.Size(75, 83);
+            this.btn_Checkout.TabIndex = 55;
+            this.btn_Checkout.Text = "Checkout";
+            this.btn_Checkout.UseVisualStyleBackColor = false;
+            this.btn_Checkout.Click += new System.EventHandler(this.btn_Checkout_Click);
             // 
             // frm_MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 566);
+            this.ClientSize = new System.Drawing.Size(687, 566);
+            this.Controls.Add(this.btn_Checkout);
+            this.Controls.Add(this.btn_CancelSelected);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
@@ -311,5 +348,8 @@ namespace RestaurantExampleWinForm.Forms
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ts_EnvanterGoruntule;
         private System.Windows.Forms.ToolStripMenuItem ts_MenuOlustur;
+        private System.Windows.Forms.Button btn_CancelSelected;
+        private System.Windows.Forms.Button btn_Checkout;
+        private System.Windows.Forms.ToolStripMenuItem ts_MenuGoruntule;
     }
 }

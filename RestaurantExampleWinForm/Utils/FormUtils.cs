@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace XIV.Utils
 {
-    
+
     public static class FormUtils
     {
         /// <summary>
@@ -45,20 +43,25 @@ namespace XIV.Utils
         }
 
         /// <summary>
-        /// If form is open returns form, else returns new form of type <typeparamref name="T"/>
+        /// If any <typeparamref name="T"/> type form is open, 
+        /// sets <paramref name="form"/> value as giving type and returns true
         /// </summary>
         /// <typeparam name="T">Form Type</typeparam>
-        public static T GetForm<T>() where T : Form
+        /// <param name="form">null if form is not open</param>
+        /// <returns>True if form is open</returns>
+        public static bool GetForm<T>(out T form) where T : Form
         {
             Type type = typeof(T);
+            form = null;
             foreach (Form item in Application.OpenForms)
             {
                 if(item.GetType() == type)
                 {
-                    return (T)item;
+                    form = (T)item;
+                    return true;
                 }
             }
-            return CreateForm<T>();
+            return false;
         }
 
         /// <summary>
@@ -67,7 +70,18 @@ namespace XIV.Utils
         /// <typeparam name="T">Form Type</typeparam>
         public static T OpenForm<T>(Form mdiParent, bool show = true) where T : Form
         {
-            Form form = GetForm<T>();
+            if(GetForm<T>(out T form))
+            {
+                form.MdiParent = mdiParent;
+                if (show)
+                {
+                    form.Show();
+                    //TODO : Do we need Activate call?
+                    form.Activate();
+                }
+                return form;
+            }
+            form = CreateForm<T>();
             form.MdiParent = mdiParent;
             if (show)
             {
@@ -75,12 +89,11 @@ namespace XIV.Utils
                 //TODO : Do we need Activate call?
                 form.Activate();
             }
-
-            return (T)form;
+            return form;
         }
 
         /// <summary>
-        /// Opens a form type of <typeparamref name="T"/>
+        /// Creates a form type of <typeparamref name="T"/>
         /// </summary>
         public static T CreateForm<T>() where T : Form
         {
@@ -89,7 +102,14 @@ namespace XIV.Utils
             return (T)form;
         }
 
-        public static DataGridViewColumn ColumnOlustur(string DataPropertyName, string Header)
+        /// <summary>
+        /// Creates a new column with giving <paramref name="DataPropertyName"/> and <paramref name="Header"/> 
+        /// and returns it
+        /// </summary>
+        /// <param name="DataPropertyName"></param>
+        /// <param name="Header"></param>
+        /// <returns>A new <see cref="DataGridViewColumn"/></returns>
+        public static DataGridViewColumn CreateColumn(string DataPropertyName, string Header)
         {
             DataGridViewColumn column = new DataGridViewTextBoxColumn();
             column.Name = DataPropertyName;
@@ -98,7 +118,12 @@ namespace XIV.Utils
             return column;
         }
 
-        public static void FillListControl_WithEnum<T>(ComboBox comboBox) where T : Enum
+        /// <summary>
+        /// Clears the <paramref name="comboBox"/> and fills with giving <typeparamref name="T"/> values where T is an Enum
+        /// </summary>
+        /// <typeparam name="T">The enum to get values</typeparam>
+        /// <param name="comboBox"><see cref="ComboBox"/> to fill</param>
+        public static void FillComboBox_WithEnum<T>(ComboBox comboBox) where T : Enum
         {
             comboBox.Items.Clear();
             Array values = EnumUtils.GetValues<T>();
@@ -112,66 +137,24 @@ namespace XIV.Utils
             }
         }
 
-        public static void RefreshComboBox(ComboBox cmb, List<object> itemList)
+        /// <summary>
+        /// Clears the <paramref name="comboBox"/> and fills with giving <paramref name="itemList"/>
+        /// </summary>
+        /// <param name="comboBox"><see cref="ComboBox"/> to refresh</param>
+        /// <param name="itemList">Values for filling the <paramref name="comboBox"/></param>
+        public static void RefreshComboBox(ComboBox comboBox, List<object> itemList)
         {
-            cmb.Items.Clear();
+            comboBox.Items.Clear();
             foreach (object item in itemList)
             {
-                cmb.Items.Add(item);
+                comboBox.Items.Add(item);
             }
-            if(cmb.SelectedIndex == -1 && cmb.Items.Count > 0)
+            if(comboBox.SelectedIndex == -1 && comboBox.Items.Count > 0)
             {
-                cmb.SelectedIndex = 0;
+                comboBox.SelectedIndex = 0;
             }
         }
 
-    }
-
-    public static class FlowLayoutUtils
-    {
-        public static void FillWithEnum<TEnum, TControl>(FlowLayoutPanel panel)
-            where TEnum : Enum
-            where TControl : ButtonBase
-        {
-            panel.Controls.Clear();
-            Array values = EnumUtils.GetValues<TEnum>();
-            foreach (object item in values)
-            {
-                var control = (ButtonBase)Activator.CreateInstance(typeof(TControl));
-                control.Name = $"{item}";
-                control.Text = item.ToString();
-                panel.Controls.Add(control);
-            }
-        }
-
-        public static void FillWithEnumList<TEnum, TControl>(FlowLayoutPanel panel, IList<TEnum> list)
-            where TEnum : Enum
-            where TControl : ButtonBase
-        {
-            panel.Controls.Clear();
-            foreach (TEnum item in list)
-            {
-                var control = (ButtonBase)Activator.CreateInstance(typeof(TControl));
-                control.Name = $"{item}";
-                control.Text = item.ToString();
-                panel.Controls.Add(control);
-            }
-        }
-
-        public static bool GetSelectedRadio(FlowLayoutPanel flowLayetPanel, out RadioButton selected)
-        {
-            selected = null;
-            foreach (RadioButton rb in flowLayetPanel.Controls)
-            {
-                if (rb.Checked)
-                {
-                    selected = rb;
-                    return true;
-                }
-            }
-
-            return false;
-        }
     }
 
 }

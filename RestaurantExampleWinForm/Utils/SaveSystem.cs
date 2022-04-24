@@ -24,24 +24,23 @@ namespace XIV.SaveSystems
 
         public static T Load<T>(string path) where T : class
         {
-            object yuklenenObj = Activator.CreateInstance(typeof(T));
             if (!File.Exists(path))
             {
-                return (T)yuklenenObj;
+                return (T)Activator.CreateInstance(typeof(T));
             }
             BinaryFormatter bf = new BinaryFormatter();
             using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 try
                 {
-                    yuklenenObj = bf.Deserialize(fs);
+                    return (T)bf.Deserialize(fs);
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
                 }
             }
-            return (T)yuklenenObj;
+            return (T)Activator.CreateInstance(typeof(T));
         }
     }
 }

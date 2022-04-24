@@ -134,6 +134,7 @@ namespace RestaurantExampleWinForm.Forms
             this.Controls.Add(this.flp_Ingredients);
             this.Name = "frm_CreateMenu";
             this.Text = "frm_CreateMenu";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frm_CreateMenu_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
