@@ -46,15 +46,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Food.cs" />
-    <Compile Include="Classes\Enums.cs" />
+    <Compile Include="Restaurant\Data\Food.cs" />
+    <Compile Include="Restaurant\Data\Enums.cs" />
+    <Compile Include="Restaurant\Interfaces\IInventory.cs" />
+    <Compile Include="Restaurant\Interfaces\IInventoryListener.cs" />
+    <Compile Include="Restaurant\Interfaces\IMenuCollection.cs" />
+    <Compile Include="Restaurant\Interfaces\IMenuListener.cs" />
+    <Compile Include="XIV\Utils\CustomListUtils.cs" />
     <Compile Include="Forms\frm_CreateMenu.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frm_CreateMenu.Designer.cs">
       <DependentUpon>frm_CreateMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\RestaurantMenu.cs" />
+    <Compile Include="Restaurant\Menu.cs" />
     <Compile Include="Forms\frm_EnvanterdenCikar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,14 +72,15 @@
     <Compile Include="Forms\frm_ViewInventory.Designer.cs">
       <DependentUpon>frm_ViewInventory.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Order.cs" />
+    <Compile Include="Restaurant\Order.cs" />
     <Compile Include="Forms\frm_ViewMenu.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frm_ViewMenu.Designer.cs">
       <DependentUpon>frm_ViewMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils\EnumUtils.cs" />
+    <Compile Include="Restaurant\Data\MenuCollection.cs" />
+    <Compile Include="XIV\Utils\EnumUtils.cs" />
     <Compile Include="Forms\frm_EnvantereEkle.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,11 +93,11 @@
     <Compile Include="Forms\frm_MainForm.Designer.cs">
       <DependentUpon>frm_MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Inventory.cs" />
-    <Compile Include="Classes\InventoryItem.cs" />
-    <Compile Include="Utils\FlowLayoutUtils.cs" />
-    <Compile Include="Utils\SaveSystem.cs" />
-    <Compile Include="Utils\FormUtils.cs" />
+    <Compile Include="XIV\InventorySystems\Inventory.cs" />
+    <Compile Include="XIV\InventorySystems\InventoryItem.cs" />
+    <Compile Include="XIV\Utils\FlpUtils.cs" />
+    <Compile Include="XIV\SaveSystems\SaveSystem.cs" />
+    <Compile Include="XIV\Utils\FormUtils.cs" />
     <Compile Include="Forms\frm_Parent.cs">
       <SubType>Form</SubType>
     </Compile>

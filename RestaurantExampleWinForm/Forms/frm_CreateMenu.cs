@@ -1,80 +1,60 @@
-﻿using Restaurant;
-using Restaurant.Data;
+﻿using Restaurant.Data;
+using Restaurant.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using XIV.InventorySystem;
+using XIV.InventorySystems;
 using XIV.Utils;
-
-public interface IMenuCreationListener
-{
-    bool OnRestaurantMenuCreated(RestaurantMenu createdMenu);
-}
 
 namespace RestaurantExampleWinForm.Forms
 {
     public partial class frm_CreateMenu : Form, IInventoryListener
     {
-        IMenuCreationListener menuCreationListener;
-
-        public IInventoryHolder InventoryHolder { get; private set; }
+        private IInventory inventory;
+        private IMenuCollection menu;
 
         public frm_CreateMenu()
         {
             InitializeComponent();
-            FlowLayoutUtils.FillWithEnum<MenuSize, CheckBox>(flp_MenuSize);
+            FlpUtils.FillWithEnum<MenuSize, CheckBox>(flp_MenuSize);
         }
 
-        public void Initialize(IMenuCreationListener creationListener, IInventoryHolder inventoryHolder)
+        public void Initialize(IInventory inventory, IMenuCollection menu)
         {
-            this.menuCreationListener = creationListener;
-            this.InventoryHolder = inventoryHolder;
-            this.InventoryHolder.AddListener(this);
+            this.inventory?.RemoveListener(this);
+            this.inventory = inventory;
+            this.inventory.AddListener(this);
+            this.menu = menu;
 
-            RefreshFlpIngredients();
-            FlowLayoutUtils.FillWithEnum<MenuSize, CheckBox>(flp_MenuSize);
+            RefreshFlpIngredients(inventory);
+            FlpUtils.FillWithEnum<MenuSize, CheckBox>(flp_MenuSize);
         }
 
-        public void RefreshFlpIngredients()
+        public void RefreshFlpIngredients(IInventory inventory)
         {
             flp_Ingredients.Controls.Clear();
-            List<Food> foods = InventoryHolder.GetInventoryItems().ToFoodList();
+
+            List<Food> foods = inventory.GetItems().ToFoodList();
             for (int i = 0; i < foods.Count; i++)
             {
-                AddFoodToPanel(foods[i]);
-            }
-        }
-
-        private void AddFoodToPanel(Food food)
-        {
-            CheckBox cb = new CheckBox();
-            cb.Name = $"cb_{food.Name}";
-            cb.Text = food.Name;
-            flp_Ingredients.Controls.Add(cb);
-        }
-
-        public void RemoveFoodFromPanel(Food food)
-        {
-            for (int i = flp_Ingredients.Controls.Count - 1; i >= 0; i--)
-            {
-                if (flp_Ingredients.Controls[i] is CheckBox item && item.Text == food.Name)
-                {
-                    flp_Ingredients.Controls.RemoveAt(i);
-                }
+                Food food = foods[i];
+                CheckBox cb = new CheckBox();
+                cb.Name = $"cb_{food.Name}";
+                cb.Text = food.Name;
+                flp_Ingredients.Controls.Add(cb);
             }
         }
 
         private void btn_Create_Click(object sender, EventArgs e)
         {
             List<MenuSize> selectedSizeList = new List<MenuSize>();
-            for (int i = 0; i < flp_MenuSize.Controls.Count; i++)
+            FlpUtils.GetSelectedCheckBoxes(flp_MenuSize, out List<CheckBox> selectedCbList);
+            for (int i = 0; i < selectedCbList.Count; i++)
             {
-                if (flp_MenuSize.Controls[i] is CheckBox item && item.Checked)
-                {
-                    MenuSize selectedType = EnumUtils.GetType<MenuSize>(item.Text);
-                    selectedSizeList.Add(selectedType);
-                }
+                MenuSize selectedType = EnumUtils.GetType<MenuSize>(selectedCbList[i].Text);
+                selectedSizeList.Add(selectedType);
             }
+
             if(selectedSizeList.Count == 0)
             {
                 MessageBox.Show("You have to select at least 1 size");
@@ -87,15 +67,15 @@ namespace RestaurantExampleWinForm.Forms
             }
 
             List<InventoryItem> menuFoods = new List<InventoryItem>();
-            foreach (CheckBox item in flp_Ingredients.Controls)
+            FlpUtils.GetSelectedCheckBoxes(flp_Ingredients, out List<CheckBox> selectedIngredientList);
+            for (int i = 0; i < selectedIngredientList.Count; i++)
             {
-                if (!item.Checked) continue;
-
-                Food food = GetFoodFromList(item.Text);
+                Food selectedFood = GetFoodFromList(selectedIngredientList[i].Text, inventory.GetItems().ToFoodList());
                 //TODO : Add ability to change count of food - Dropdown? NumericUpDown?
-                InventoryItem inventoryItem = new InventoryItem(1, food);
+                InventoryItem inventoryItem = new InventoryItem(1, selectedFood);
                 menuFoods.Add(inventoryItem);
             }
+
             if(menuFoods.Count == 0)
             {
                 MessageBox.Show("You didnt select any food to create a menu");
@@ -107,18 +87,17 @@ namespace RestaurantExampleWinForm.Forms
                 return;
             }
 
-            RestaurantMenu menu = RestaurantMenu.CreateMenu(txt_MenuName.Text, result,
+            Restaurant.Menu menu = Restaurant.Menu.CreateMenu(txt_MenuName.Text, result,
                 selectedSizeList, menuFoods.ToArray());
 
-            if (menuCreationListener.OnRestaurantMenuCreated(menu))
+            if (this.menu.Add(menu.Name, menu))
             {
                 MessageBox.Show($"Created a menu : {txt_MenuName.Text}");
             }
         }
 
-        private Food GetFoodFromList(string foodName)
+        private Food GetFoodFromList(string foodName, List<Food> foods)
         {
-            List<Food> foods = InventoryHolder.GetInventoryItems().ToFoodList();
             for (int i = 0; i < foods.Count; i++)
             {
                 if (foods[i].Name == foodName)
@@ -129,14 +108,14 @@ namespace RestaurantExampleWinForm.Forms
             return null;
         }
 
-        public void OnInventoryChanged()
+        public void OnInventoryChanged(IInventory inventory)
         {
-            RefreshFlpIngredients();
+            RefreshFlpIngredients(inventory);
         }
 
         private void frm_CreateMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.InventoryHolder.RemoveListener(this);
+            this.inventory?.RemoveListener(this);
         }
     }
 }

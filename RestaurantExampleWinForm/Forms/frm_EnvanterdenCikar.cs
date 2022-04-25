@@ -1,19 +1,15 @@
 ﻿using Restaurant.Data;
+using Restaurant.Interfaces;
 using System;
 using System.Windows.Forms;
-using XIV.InventorySystem;
+using XIV.InventorySystems;
 using XIV.Utils;
-
-public interface IItemRemoveListener
-{
-    void OnRemoveItem(InventoryItem inventoryItem);
-}
 
 namespace RestaurantExampleWinForm.Forms
 {
     public partial class frm_EnvanterdenCikar : Form
     {
-        IItemRemoveListener itemRemoveListener;
+        IInventory inventory;
 
         public frm_EnvanterdenCikar()
         {
@@ -22,9 +18,9 @@ namespace RestaurantExampleWinForm.Forms
             nup_Count.Minimum = 1;
         }
 
-        public void Initialize(IItemRemoveListener itemRemoveListener)
+        public void Initialize(IInventory inventory)
         {
-            this.itemRemoveListener = itemRemoveListener;
+            this.inventory = inventory;
         }
 
         private void btn_Cikar_Click(object sender, EventArgs e)
@@ -33,9 +29,14 @@ namespace RestaurantExampleWinForm.Forms
             FoodType type = EnumUtils.GetType<FoodType>(typeName);
             Food food = new Food(txt_ItemName.Text, 0, type);
             InventoryItem inventoryItem = new InventoryItem((int)nup_Count.Value, food);
-            itemRemoveListener.OnRemoveItem(inventoryItem);
-            //TODO : We dont know is inventory has this item
-            MessageBox.Show($"{food.Name} removed from inventory");
+            if (inventory.Remove(inventoryItem))
+            {
+                MessageBox.Show($"{food.Name} removed from inventory");
+            }
+            else
+            {
+                MessageBox.Show("Couldnt remove item");
+            }
         }
     }
 }

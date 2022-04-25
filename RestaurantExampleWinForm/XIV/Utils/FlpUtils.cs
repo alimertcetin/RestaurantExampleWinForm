@@ -5,11 +5,14 @@ using System.Windows.Forms;
 
 namespace XIV.Utils
 {
-    public static class FlowLayoutUtils
+    /// <summary>
+    /// Utilities for <see cref="FlowLayoutPanel"/> class
+    /// </summary>
+    public static class FlpUtils
     {
         /// <summary>
         /// Gets values of <typeparamref name="TEnum"/> and fills <paramref name="panel"/> 
-        /// with giving <typeparamref name="TButtonBase"/>
+        /// with <typeparamref name="TButtonBase"/>
         /// </summary>
         /// <typeparam name="TEnum">Enum to get texts of <typeparamref name="TButtonBase"/></typeparam>
         /// <typeparam name="TButtonBase">Type to fill <paramref name="panel"/></typeparam>

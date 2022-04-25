@@ -1,48 +1,26 @@
-﻿using System;
+﻿using Restaurant.Interfaces;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using XIV.InventorySystem;
-using XIV.Utils;
+using XIV.InventorySystems;
 
 namespace RestaurantExampleWinForm.Forms
 {
-    public interface IInventoryHolder
-    {
-        List<InventoryItem> GetInventoryItems();
-        void AddListener(IInventoryListener inventoryListener);
-        void RemoveListener(IInventoryListener inventoryListener);
-    }
-    public interface IInventoryListener
-    {
-        IInventoryHolder InventoryHolder { get; }
-        void OnInventoryChanged();
-    }
-
     public partial class frm_ViewInventory : Form, IInventoryListener
     {
-        public IInventoryHolder InventoryHolder { get; private set; }
-
         public frm_ViewInventory()
         {
             InitializeComponent();
         }
 
-        public void Initialize(IInventoryHolder inventoryHolder)
+        public void Initialize(IInventory inventory)
         {
-            this.InventoryHolder = inventoryHolder;
-            this.InventoryHolder.AddListener(this);
-            RefreshGrid(this.InventoryHolder.GetInventoryItems());
+            inventory.AddListener(this);
+            RefreshGrid(inventory.GetItems());
         }
 
-        public void OnInventoryChanged()
+        public void OnInventoryChanged(IInventory inventory)
         {
-            RefreshGrid(this.InventoryHolder.GetInventoryItems());
+            RefreshGrid(inventory.GetItems());
         }
 
         private void RefreshGrid(List<InventoryItem> itemList)

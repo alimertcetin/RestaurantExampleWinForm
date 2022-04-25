@@ -1,19 +1,15 @@
 ﻿using Restaurant.Data;
+using Restaurant.Interfaces;
 using System;
 using System.Windows.Forms;
-using XIV.InventorySystem;
+using XIV.InventorySystems;
 using XIV.Utils;
-
-public interface IItemAddListener
-{
-    void OnAddItem(InventoryItem inventoryItem);
-}
 
 namespace RestaurantExampleWinForm.Forms
 {
     public partial class frm_EnvantereEkle : Form
     {
-        IItemAddListener itemAddListener;
+        IInventory inventory;
 
         public frm_EnvantereEkle()
         {
@@ -22,9 +18,9 @@ namespace RestaurantExampleWinForm.Forms
             nup_Count.Minimum = 1;
         }
 
-        public void Initialize(IItemAddListener itemAddListener)
+        public void Initialize(IInventory inventory)
         {
-            this.itemAddListener = itemAddListener;
+            this.inventory = inventory;
         }
 
         private void btn_Ekle_Click(object sender, EventArgs e)
@@ -35,8 +31,15 @@ namespace RestaurantExampleWinForm.Forms
                 FoodType type = EnumUtils.GetType<FoodType>(typeName);
                 Food food = new Food(txt_ItemName.Text, result, type);
                 InventoryItem inventoryItem = new InventoryItem((int)nup_Count.Value, food);
-                itemAddListener.OnAddItem(inventoryItem);
-                MessageBox.Show($"{food.Name} added to inventory");
+                if (inventory.Add(inventoryItem))
+                {
+                    MessageBox.Show($"{food.Name} added to inventory");
+                }
+                else
+                {
+                    MessageBox.Show("Couldnt add to inventory");
+                }
+                //itemAddListener.OnAddItem(inventoryItem);
             }
             else
             {

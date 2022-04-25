@@ -1,67 +1,48 @@
 ﻿using Restaurant;
 using Restaurant.Data;
+using Restaurant.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using XIV.InventorySystem;
+using XIV.InventorySystems;
 using XIV.SaveSystems;
 using XIV.Utils;
 
 namespace RestaurantExampleWinForm.Forms
 {
-    public partial class frm_MainForm : Form, IMenuCreationListener, IItemAddListener, IItemRemoveListener, IInventoryHolder, IMenuHolder
+    public partial class frm_MainForm : Form, IMenuListener
     {
+        #region Custom Methods
         Inventory inventory;
         const string INVENTORY_PATH = "inventory.bin";
 
-        MenuOfRest restaurantMenu;
+        MenuCollection restaurantMenu;
         const string MENU_PATH = "menu.bin";
 
         List<Order> orderList = new List<Order>();
-        List<IInventoryListener> inventoryListeners = new List<IInventoryListener>();
-        List<IMenuListener> menuListeners = new List<IMenuListener>();
 
-        public frm_MainForm()
+        private void RefreshFormControls()
         {
-            InitializeComponent();
+            RefreshOrderList();
+            RefreshMenuCmb();
+            RefreshFlpSize();
         }
 
-        private void RefreshFlpSize()
+        private void RefreshOrderList(bool keepSelection = false)
         {
-            if (cmb_Menu.SelectedIndex == -1) return;
-
-            //menülerden şu anda seçili olanı bul
-            string menuName = cmb_Menu.Items[cmb_Menu.SelectedIndex].ToString();
-
-            //Menünün boyut seçeneklerini al
-            List<MenuSize> sizeOptions = restaurantMenu.GetAvailableSize(menuName);
-
-            string selectedTxt = string.Empty;
-            //Get selected radio
-            if(FlowLayoutUtils.GetSelectedRadio(flp_Size, out var selectedRb))
+            int selectedIndex = -1;
+            if (keepSelection)
             {
-                selectedTxt = selectedRb.Text;
+                selectedIndex = lstb_OrderList.SelectedIndex;
             }
-
-            //Radio button olarak flpSize'a ekle
-            FlowLayoutUtils.FillWithEnumList<MenuSize, RadioButton>(flp_Size, sizeOptions);
-            FlowLayoutUtils.SetSelectedRadio(flp_Size, selectedTxt);
-
-        }
-
-        public bool OnRestaurantMenuCreated(RestaurantMenu addedMenu)
-        {
-            try
+            lstb_OrderList.Items.Clear();
+            for (int i = 0; i < orderList.Count; i++)
             {
-                restaurantMenu.Add(addedMenu.Name, addedMenu);
-                RefreshFormControls();
-                RefreshMenuListeners();
-                return true;
+                lstb_OrderList.Items.Add(orderList[i].ToString());
             }
-            catch (ArgumentException e)
+            if (keepSelection && selectedIndex < lstb_OrderList.Items.Count && selectedIndex > -1)
             {
-                MessageBox.Show(e.Message);
-                return false;
+                lstb_OrderList.SelectedIndex = selectedIndex;
             }
         }
 
@@ -83,137 +64,66 @@ namespace RestaurantExampleWinForm.Forms
             }
         }
 
-        public void OnAddItem(InventoryItem inventoryItem)
+        private void RefreshFlpSize()
         {
-            inventory.Add(inventoryItem);
-            RefreshListeners();
-            RefreshMenuListeners();
-            RefreshFormControls();
-        }
+            if (cmb_Menu.SelectedIndex == -1) return;
 
-        public void OnRemoveItem(InventoryItem inventoryItem)
-        {
-            inventory.Remove(inventoryItem.Item, inventoryItem.Amount);
-            RefreshListeners();
-            RefreshMenuListeners();
-            RefreshFormControls();
-        }
+            string menuName = cmb_Menu.Items[cmb_Menu.SelectedIndex].ToString();
+            List<MenuSize> sizeOptions = restaurantMenu.GetAvailableSize(menuName);
 
-        private void RefreshOrderList(bool keepSelection = false)
-        {
-            int selectedIndex = -1;
-            if (keepSelection)
+            string previousSelected = string.Empty;
+            if (FlpUtils.GetSelectedRadio(flp_Size, out var selectedRb))
             {
-                selectedIndex = lstb_OrderList.SelectedIndex;
+                previousSelected = selectedRb.Text;
             }
-            lstb_OrderList.Items.Clear();
-            for (int i = 0; i < orderList.Count; i++)
-            {
-                lstb_OrderList.Items.Add(orderList[i].ToString());
-            }
-            if(keepSelection && selectedIndex < lstb_OrderList.Items.Count && selectedIndex > -1)
-            {
-                lstb_OrderList.SelectedIndex = selectedIndex;
-            }
-        }
 
-        private void RefreshFormControls()
-        {
-            RefreshOrderList();
-            RefreshMenuCmb();
-            RefreshFlpSize();
-        }
+            FlpUtils.FillWithEnumList<MenuSize, RadioButton>(flp_Size, sizeOptions);
+            //We have to set selection after we refresh the panel
+            FlpUtils.SetSelectedRadio(flp_Size, previousSelected);
 
-        public List<InventoryItem> GetInventoryItems()
-        {
-            return inventory.GetItems();
-        }
-
-        public void AddListener(IInventoryListener inventoryListener)
-        {
-            if (!inventoryListeners.Contains(inventoryListener))
-            {
-                inventoryListeners.Add(inventoryListener);
-            }
-        }
-
-        public void RemoveListener(IInventoryListener inventoryListener)
-        {
-            if (inventoryListeners.Contains(inventoryListener))
-            {
-                inventoryListeners.Remove(inventoryListener);
-            }
-        }
-
-        private void RefreshListeners()
-        {
-            for (int i = 0; i < inventoryListeners.Count; i++)
-            {
-                inventoryListeners[i].OnInventoryChanged();
-            }
         }
 
         private void CancelOrder(int orderIndex)
         {
-            double currentPrice = double.Parse(lbl_TotalPrice.Text);
             double cancelPrice = 0;
 
             Order order = orderList[orderIndex];
+            orderList.RemoveAt(orderIndex);
+
             List<InventoryItem> items = restaurantMenu.GetItemsOf(order.MenuName);
+            double menuPrice = restaurantMenu.GetPriceOf(order.MenuName);
             for (int i = 0; i < order.MenuCount; i++)
             {
+                cancelPrice += menuPrice;
                 for (int j = 0; j < items.Count; j++)
                 {
-                    cancelPrice += items[j].Item.Price;
                     inventory.Add(items[j]);
                 }
             }
-            currentPrice -= cancelPrice;
+            double currentPrice = double.Parse(lbl_TotalPrice.Text) - cancelPrice;
             lbl_TotalPrice.Text = currentPrice.ToString();
-            orderList.RemoveAt(orderIndex);
         }
 
-        public List<string> GetMenuList()
+        public void OnMenuChanged(IMenuCollection menu)
         {
-            return restaurantMenu.GetMenuList();
+            RefreshFormControls();
         }
 
-        public List<InventoryItem> GetItemsOf(string menuName)
+        #endregion
+
+        #region form callbacks
+
+        public frm_MainForm()
         {
-            return restaurantMenu.GetItemsOf(menuName);
+            InitializeComponent();
         }
-
-        public void AddListener(IMenuListener menuListener)
-        {
-            if (!menuListeners.Contains(menuListener))
-            {
-                menuListeners.Add(menuListener);
-            }
-        }
-
-        public void RemoveListener(IMenuListener menuListener)
-        {
-            if (menuListeners.Contains(menuListener))
-            {
-                menuListeners.Remove(menuListener);
-            }
-        }
-
-        private void RefreshMenuListeners()
-        {
-            for (int i = 0; i < menuListeners.Count; i++)
-            {
-                menuListeners[i].RefreshMenu();
-            }
-        }
-
-        //-------------------
-        //-------------------Form Callbacks
 
         private void frm_MainForm_Load(object sender, EventArgs e)
         {
-            inventory = SaveSystem.Load<Inventory>(INVENTORY_PATH);
-            restaurantMenu = SaveSystem.Load<MenuOfRest>(MENU_PATH);
+            SaveSystem.Load(ref inventory, INVENTORY_PATH);
+            SaveSystem.Load(ref restaurantMenu, MENU_PATH);
+
+            restaurantMenu.AddListener(this);
             nup_menuAmount.Minimum = 1;
             RefreshFormControls();
         }
@@ -231,25 +141,24 @@ namespace RestaurantExampleWinForm.Forms
         private void ts_MalzemeEkle_Click(object sender, EventArgs e)
         {
             frm_EnvantereEkle form = FormUtils.OpenForm<frm_EnvantereEkle>(this.MdiParent);
-            form.Initialize(this);
+            form.Initialize(inventory);
         }
 
         private void ts_MenuOlustur_Click(object sender, EventArgs e)
         {
             frm_CreateMenu form = FormUtils.OpenForm<frm_CreateMenu>(this.MdiParent);
-            form.Initialize(this, this);
+            form.Initialize(inventory, restaurantMenu);
         }
 
         private void ts_MalzemeCikar_Click(object sender, EventArgs e)
         {
             frm_EnvanterdenCikar form = FormUtils.OpenForm<frm_EnvanterdenCikar>(this.MdiParent);
-            form.Initialize(this);
+            form.Initialize(inventory);
         }
 
         private void btn_SiparisEkle_Click(object sender, EventArgs e)
         {
-            //TODO : Create order, update total price, remove from inventory
-            if (!FlowLayoutUtils.GetSelectedRadio(flp_Size, out RadioButton radioButton))
+            if (!FlpUtils.GetSelectedRadio(flp_Size, out RadioButton radioButton))
             {
                 MessageBox.Show("Select a menu size");
                 return;
@@ -260,30 +169,28 @@ namespace RestaurantExampleWinForm.Forms
             string menuName = cmb_Menu.Items[cmb_Menu.SelectedIndex].ToString();
 
             int orderCount = (int)nup_menuAmount.Value;
-            if(restaurantMenu.Contains(menuName))
+            if (restaurantMenu.Contains(menuName))
             {
                 List<InventoryItem> menuItems = restaurantMenu.GetItemsOf(menuName);
                 if (inventory.IsLegitOrder(orderCount, menuItems))
                 {
                     double totalMenuPrice = double.Parse(lbl_TotalPrice.Text);
-                    for (int i = 0; i < menuItems.Count; i++)
-                    {
-                        InventoryItem menuItem = menuItems[i];
-                        for (int j = 0; j < menuItem.Amount; j++)
-                        {
-                            totalMenuPrice += menuItem.Item.Price;
-                        }
-                    }
-                    Order order = new Order(orderList.Count, menuName, menuSize, orderCount, totalMenuPrice);
-                    orderList.Add(order);
-                    lbl_TotalPrice.Text = totalMenuPrice.ToString();
-
+                    double menuPrice = restaurantMenu.GetPriceOf(menuName);
                     for (int i = 0; i < orderCount; i++)
                     {
-                        inventory.Remove(menuItems);
+                        totalMenuPrice += menuPrice;
+                        for (int j = 0; j < menuItems.Count; j++)
+                        {
+                            if (!inventory.Remove(menuItems[j]))
+                            {
+                                MessageBox.Show("Couldnt remove item from inventory : " + menuItems[j]);
+                                return;
+                            }
+                        }
                     }
-                    RefreshFormControls();
-                    RefreshListeners();
+                    lbl_TotalPrice.Text = totalMenuPrice.ToString();
+                    Order order = new Order(orderList.Count, menuName, menuSize, orderCount, totalMenuPrice);
+                    orderList.Add(order);
                 }
                 else
                 {
@@ -313,7 +220,7 @@ namespace RestaurantExampleWinForm.Forms
         private void ts_EnvanterGoruntule_Click(object sender, EventArgs e)
         {
             frm_ViewInventory form = FormUtils.OpenForm<frm_ViewInventory>(this.MdiParent);
-            form.Initialize(this);
+            form.Initialize(inventory);
         }
 
         private void btn_CancelSelected_Click(object sender, EventArgs e)
@@ -325,16 +232,14 @@ namespace RestaurantExampleWinForm.Forms
                 return;
             }
 
-            //TODO :  update total price, add to inventory
             CancelOrder(selectedOrderIndex);
             RefreshOrderList(true);
-            RefreshListeners();
         }
 
         private void ts_MenuGoruntule_Click(object sender, EventArgs e)
         {
             frm_ViewMenu form = FormUtils.OpenForm<frm_ViewMenu>(this.MdiParent);
-            form.Initialize(this);
+            form.Initialize(restaurantMenu);
         }
 
         private void btn_Checkout_Click(object sender, EventArgs e)
@@ -344,83 +249,5 @@ namespace RestaurantExampleWinForm.Forms
         }
     }
 
-}
-
-[System.Serializable]
-public class MenuOfRest
-{
-    Dictionary<string, RestaurantMenu> menu = new Dictionary<string, RestaurantMenu>();
-
-    public void Add(string menuName, RestaurantMenu item)
-    {
-        menu.Add(menuName, item);
-    }
-
-    public void Remove(string menuName)
-    {
-        menu.Remove(menuName);
-    }
-
-    public List<string> GetMenuList()
-    {
-        string[] menuNames = new string[menu.Keys.Count];
-        menu.Keys.CopyTo(menuNames, 0);
-
-        List<string> nameList = new List<string>();
-        for (int i = 0; i < menuNames.Length; i++)
-        {
-            nameList.Add(menuNames[i]);
-        }
-        return nameList;
-    }
-
-    public bool Contains(string menuName)
-    {
-        return menu.ContainsKey(menuName);
-    }
-
-    public List<InventoryItem> GetItemsOf(string menuName)
-    {
-        if(menu.TryGetValue(menuName, out var itemList))
-        {
-            return itemList.GetItems();
-        }
-        throw new InvalidOperationException("Couldnt find menu");
-    }
-
-    public List<MenuSize> GetAvailableSize(string menuName)
-    {
-        if (menu.TryGetValue(menuName, out var restaurantMenu))
-        {
-            return restaurantMenu.AvailableSizeList;
-        }
-        throw new InvalidOperationException("Couldnt find menu");
-    }
-}
-
-public static class CustomListUtils
-{
-    public static List<Food> ToFoodList(this List<InventoryItem> restaurantMenus)
-    {
-        List<Food> foodList = new List<Food>();
-        for (int i = 0; i < restaurantMenus.Count; i++)
-        {
-            foodList.Add(restaurantMenus[i].Item);
-        }
-        return foodList;
-    }
-
-    public static bool GetMenu(this List<RestaurantMenu> restaurantMenuList, string menuName, out RestaurantMenu restaurantMenu)
-    {
-        restaurantMenu = null;
-        for (int i = 0; i < restaurantMenuList.Count; i++)
-        {
-            if (restaurantMenuList[i].Name == menuName)
-            {
-                restaurantMenu = restaurantMenuList[i];
-                return true;
-            }
-        }
-        return false;
-    }
+    #endregion
 }

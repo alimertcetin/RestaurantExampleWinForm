@@ -4,7 +4,9 @@ using System.Windows.Forms;
 
 namespace XIV.Utils
 {
-
+    /// <summary>
+    /// Utilities for <see cref="Form"/> class
+    /// </summary>
     public static class FormUtils
     {
         /// <summary>
@@ -97,9 +99,7 @@ namespace XIV.Utils
         /// </summary>
         public static T CreateForm<T>() where T : Form
         {
-            Type type = typeof(T);
-            Form form = (Form)Activator.CreateInstance(type);
-            return (T)form;
+            return (T)Activator.CreateInstance(typeof(T));
         }
 
         /// <summary>

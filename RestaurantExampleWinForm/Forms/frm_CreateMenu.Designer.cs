@@ -44,7 +44,7 @@ namespace RestaurantExampleWinForm.Forms
             // 
             this.flp_Ingredients.Location = new System.Drawing.Point(12, 35);
             this.flp_Ingredients.Name = "flp_Ingredients";
-            this.flp_Ingredients.Size = new System.Drawing.Size(347, 178);
+            this.flp_Ingredients.Size = new System.Drawing.Size(215, 178);
             this.flp_Ingredients.TabIndex = 0;
             // 
             // label1
@@ -59,7 +59,7 @@ namespace RestaurantExampleWinForm.Forms
             // 
             // btn_Create
             // 
-            this.btn_Create.Location = new System.Drawing.Point(620, 404);
+            this.btn_Create.Location = new System.Drawing.Point(339, 226);
             this.btn_Create.Name = "btn_Create";
             this.btn_Create.Size = new System.Drawing.Size(92, 34);
             this.btn_Create.TabIndex = 1;
@@ -69,16 +69,16 @@ namespace RestaurantExampleWinForm.Forms
             // 
             // txt_Price
             // 
-            this.txt_Price.Location = new System.Drawing.Point(18, 296);
+            this.txt_Price.Location = new System.Drawing.Point(147, 240);
             this.txt_Price.Name = "txt_Price";
-            this.txt_Price.Size = new System.Drawing.Size(140, 20);
+            this.txt_Price.Size = new System.Drawing.Size(75, 20);
             this.txt_Price.TabIndex = 2;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label2.Location = new System.Drawing.Point(15, 275);
+            this.label2.Location = new System.Drawing.Point(144, 219);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(83, 18);
             this.label2.TabIndex = 2;
@@ -88,7 +88,7 @@ namespace RestaurantExampleWinForm.Forms
             // 
             this.txt_MenuName.Location = new System.Drawing.Point(18, 240);
             this.txt_MenuName.Name = "txt_MenuName";
-            this.txt_MenuName.Size = new System.Drawing.Size(140, 20);
+            this.txt_MenuName.Size = new System.Drawing.Size(123, 20);
             this.txt_MenuName.TabIndex = 3;
             // 
             // label3
@@ -103,16 +103,16 @@ namespace RestaurantExampleWinForm.Forms
             // 
             // flp_MenuSize
             // 
-            this.flp_MenuSize.Location = new System.Drawing.Point(365, 35);
+            this.flp_MenuSize.Location = new System.Drawing.Point(233, 35);
             this.flp_MenuSize.Name = "flp_MenuSize";
-            this.flp_MenuSize.Size = new System.Drawing.Size(347, 178);
+            this.flp_MenuSize.Size = new System.Drawing.Size(198, 178);
             this.flp_MenuSize.TabIndex = 1;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label4.Location = new System.Drawing.Point(362, 14);
+            this.label4.Location = new System.Drawing.Point(230, 14);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(78, 18);
             this.label4.TabIndex = 5;
@@ -122,7 +122,7 @@ namespace RestaurantExampleWinForm.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(725, 450);
+            this.ClientSize = new System.Drawing.Size(435, 270);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.flp_MenuSize);
             this.Controls.Add(this.label1);

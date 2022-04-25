@@ -1,12 +1,11 @@
 ﻿using Restaurant.Data;
 using System;
 using System.Collections.Generic;
-using XIV.InventorySystem;
+using XIV.InventorySystems;
 
 namespace Restaurant
 {
-    [System.Serializable]
-    public class RestaurantMenu : IEquatable<RestaurantMenu>
+    public class Menu : IEquatable<Menu>
     {
         List<InventoryItem> items = new List<InventoryItem>();
 
@@ -23,12 +22,12 @@ namespace Restaurant
             return new List<InventoryItem>(items);
         }
 
-        public static RestaurantMenu CreateMenu(string menuName, 
+        public static Menu CreateMenu(string menuName, 
             double price,
             List<MenuSize> availableSizeList,
             params InventoryItem[] items)
         {
-            var menu = new RestaurantMenu();
+            var menu = new Menu();
             menu.Name = menuName;
             menu.Price = price;
             menu.AvailableSizeList = availableSizeList;
@@ -46,12 +45,12 @@ namespace Restaurant
 
         public override bool Equals(object other)
         {
-            if (!(other is RestaurantMenu)) return false;
+            if (!(other is Menu)) return false;
 
             return other.GetHashCode() == GetHashCode();
         }
 
-        public bool Equals(RestaurantMenu other)
+        public bool Equals(Menu other)
         {
             return other.GetHashCode() == GetHashCode();
         }

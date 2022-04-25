@@ -2,18 +2,26 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+
 namespace XIV.SaveSystems
 {
+    public interface ISaveable
+    {
+        object GetSaveData();
+        void Load(object loadedData);
+    }
+
     public static class SaveSystem
     {
-        public static void Save(object objectToSave, string path)
+        public static void Save(ISaveable saveable, string path)
         {
             BinaryFormatter bf = new BinaryFormatter();
             using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 try
                 {
-                    bf.Serialize(fs, objectToSave);
+                    object saveData = saveable.GetSaveData();
+                    bf.Serialize(fs, saveData);
                 }
                 catch (Exception e)
                 {
@@ -22,25 +30,26 @@ namespace XIV.SaveSystems
             }
         }
 
-        public static T Load<T>(string path) where T : class
+        public static void Load<TSaveable>(ref TSaveable saveable, string path) 
+            where TSaveable : ISaveable
         {
+            saveable = (TSaveable)Activator.CreateInstance(typeof(TSaveable));
             if (!File.Exists(path))
             {
-                return (T)Activator.CreateInstance(typeof(T));
+                return;
             }
             BinaryFormatter bf = new BinaryFormatter();
             using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 try
                 {
-                    return (T)bf.Deserialize(fs);
+                    saveable.Load(bf.Deserialize(fs));
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
                 }
             }
-            return (T)Activator.CreateInstance(typeof(T));
         }
     }
 }
