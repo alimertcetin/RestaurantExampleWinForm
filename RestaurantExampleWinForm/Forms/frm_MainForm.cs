@@ -191,6 +191,7 @@ namespace RestaurantExampleWinForm.Forms
                     lbl_TotalPrice.Text = totalMenuPrice.ToString();
                     Order order = new Order(orderList.Count, menuName, menuSize, orderCount, totalMenuPrice);
                     orderList.Add(order);
+                    RefreshOrderList();
                 }
                 else
                 {
