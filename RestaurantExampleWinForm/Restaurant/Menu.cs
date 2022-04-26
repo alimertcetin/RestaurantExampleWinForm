@@ -5,6 +5,7 @@ using XIV.InventorySystems;
 
 namespace Restaurant
 {
+    [System.Serializable]
     public class Menu : IEquatable<Menu>
     {
         List<InventoryItem> items = new List<InventoryItem>();

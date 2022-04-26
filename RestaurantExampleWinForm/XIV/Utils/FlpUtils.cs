@@ -108,7 +108,7 @@ namespace XIV.Utils
                 }
             }
 
-            return selectedCb.Count > 0;
+            return selectedCb != null && selectedCb.Count > 0;
         }
     }
 

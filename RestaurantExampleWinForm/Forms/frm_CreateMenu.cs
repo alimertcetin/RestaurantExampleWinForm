@@ -48,14 +48,16 @@ namespace RestaurantExampleWinForm.Forms
         private void btn_Create_Click(object sender, EventArgs e)
         {
             List<MenuSize> selectedSizeList = new List<MenuSize>();
-            FlpUtils.GetSelectedCheckBoxes(flp_MenuSize, out List<CheckBox> selectedCbList);
-            for (int i = 0; i < selectedCbList.Count; i++)
-            {
-                MenuSize selectedType = EnumUtils.GetType<MenuSize>(selectedCbList[i].Text);
-                selectedSizeList.Add(selectedType);
-            }
 
-            if(selectedSizeList.Count == 0)
+            if(FlpUtils.GetSelectedCheckBoxes(flp_MenuSize, out List<CheckBox> selectedCbList))
+            {
+                for (int i = 0; i < selectedCbList.Count; i++)
+                {
+                    MenuSize selectedType = EnumUtils.GetType<MenuSize>(selectedCbList[i].Text);
+                    selectedSizeList.Add(selectedType);
+                }
+            }
+            else
             {
                 MessageBox.Show("You have to select at least 1 size");
                 return;
